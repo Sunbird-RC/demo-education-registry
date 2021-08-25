@@ -1,2 +1,2 @@
-# ndear-core-registries
-NDEAR Core Registries
+# edu-core-registries
+Education domain Core Registries
