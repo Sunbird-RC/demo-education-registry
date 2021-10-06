@@ -307,7 +307,11 @@
                                     "fields": [
                                         {
                                             "name": "fullName",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "^[a-zA-Z]+ [a-zA-Z]+$",
+                                                "message": "Name is not valid."
+                                            }
                                         }
                                     ]
                                 }
@@ -365,7 +369,11 @@
                                     "fields": [
                                         {
                                             "name": "fullName",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "^[a-zA-Z]+ [a-zA-Z]+$",
+                                                "message": "Name is not valid."
+                                            }
                                         },
                                         {
                                             "name": "gender",
@@ -565,7 +573,7 @@
                                         "properties": {
                                             "above13": {
                                                 "enum": [
-                                                    "No"
+                                                    "Yes"
                                                 ]
                                             },
                                             "guardianDetails": {
@@ -587,7 +595,7 @@
                                         "properties": {
                                             "above13": {
                                                 "enum": [
-                                                    "No"
+                                                    "Yes"
                                                 ]
                                             }
                                         },
@@ -625,7 +633,11 @@
                                     "fields": [
                                         {
                                             "name": "fullName",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "^[a-zA-Z]+ [a-zA-Z]+$",
+                                                "message": "Name is not valid."
+                                            }
                                         }
                                     ]
                                 }
@@ -683,7 +695,11 @@
                                     "fields": [
                                         {
                                             "name": "fullName",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "^[a-zA-Z]+ [a-zA-Z]+$",
+                                                "message": "Name is not valid."
+                                            }
                                         },
                                         {
                                             "name": "gender"
