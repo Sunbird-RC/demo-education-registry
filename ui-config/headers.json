@@ -26,7 +26,7 @@
                 ],
                 "right": [
                     {
-                        "image": "/assets/config/logout.png",
+                        "image": "/assets/images/logout.png",
                         "redirectTo": "/logout"
                     }
                 ]
@@ -46,7 +46,7 @@
                 ],
                 "right": [
                     {
-                        "image": "/assets/config/logout.png",
+                        "image": "/assets/images/logout.png",
                         "redirectTo": "/logout"
                     }
                 ]
@@ -62,7 +62,7 @@
                 ],
                 "right": [
                     {
-                        "image": "/assets/config/logout.png",
+                        "image": "/assets/images/logout.png",
                         "redirectTo": "/logout"
                     }
                 ]
@@ -78,7 +78,7 @@
                 ],
                 "right": [
                     {
-                        "image": "/assets/config/logout.png",
+                        "image": "/assets/images/logout.png",
                         "redirectTo": "/logout"
                     }
                 ]

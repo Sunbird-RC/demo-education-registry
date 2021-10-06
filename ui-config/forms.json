@@ -474,12 +474,9 @@
                         "definition": "ExperienceType",
                         "privacyConfig": "AffiliationOsConfig",
                         "fields": [
+                            
                             {
-                                "name": "instituteOSID",
-                                "hidden": true
-                            },
-                            {
-                                "name": "instituteName",
+                                "name": "institute",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
@@ -516,11 +513,18 @@
                             {
                                 "name": "start",
                                 "required": true,
-                                "type": "date"
+                                "type": "date",
+                                "validation": {
+                                    "future":false
+                                }
                             },
                             {
                                 "name": "end",
-                                "type": "date"
+                                "type": "date",
+                                "validation": {
+                                    "lessThan":"start",
+                                    "message":"End date must be less than start date"
+                                }
                             },
                             {
                                 "name": "teacherType",
@@ -528,7 +532,8 @@
                             },
                             {
                                 "name": "subjects",
-                                "type": "multiselect"
+                                "type": "multiselect",
+                                "required": true
                             },
                             {
                                 "name": "grades",
