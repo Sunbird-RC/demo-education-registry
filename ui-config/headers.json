@@ -1,0 +1,88 @@
+{
+    "type": "opensaberLayoutSchema",
+    "version": "0.1",
+    "headers": [
+        {
+            "default":{
+                "right":[
+                    {
+                        "title": "Login",
+                        "redirectTo": "/login"
+                    }
+                ]
+            }
+        },
+        {
+            "institute": {
+                "left": [
+                    {
+                        "title": "Home",
+                        "redirectTo": "/profile/institute"
+                    },
+                    {
+                        "title": "Attestations",
+                        "redirectTo": "/institute/attestation/institute-attestation"
+                    }
+                ],
+                "right": [
+                    {
+                        "image": "/assets/images/logout.png",
+                        "redirectTo": "/logout"
+                    }
+                ]
+            }
+        },
+        {
+            "teacher": {
+                "left": [
+                    {
+                        "title": "Home",
+                        "redirectTo": "/profile/teacher"
+                    },
+                    {
+                        "title": "Attestations",
+                        "redirectTo": "/teacher/attestation/teacher-attestation"
+                    }
+                ],
+                "right": [
+                    {
+                        "image": "/assets/images/logout.png",
+                        "redirectTo": "/logout"
+                    }
+                ]
+            }
+        },
+        {
+            "student": {
+                "left": [
+                    {
+                        "title": "Home",
+                        "redirectTo": "/profile/student"
+                    }
+                ],
+                "right": [
+                    {
+                        "image": "/assets/images/logout.png",
+                        "redirectTo": "/logout"
+                    }
+                ]
+            }
+        },
+        {
+            "board-cbse": {
+                "left": [
+                    {
+                        "title": "Attestations",
+                        "redirectTo": "/profile/board-cbse"
+                    }
+                ],
+                "right": [
+                    {
+                        "image": "/assets/images/logout.png",
+                        "redirectTo": "/logout"
+                    }
+                ]
+            }
+        }
+    ]
+}
