@@ -1,7 +1,7 @@
 {
     "type": "opensaberLayoutSchema",
     "version": "0.1",
-    "header": "main",
+    "header": "default",
     "limit" : "5",
     "searches": [
          {
@@ -9,7 +9,6 @@
                 "tab": "institute",
                 "tabTitle": "Search Institute",
                 "api": "/Institute/search",
-                "header": "main",
                 "activeTab": "active",
                 "filters": [
                     {
@@ -83,7 +82,6 @@
                 "tab": "teacher",
                 "tabTitle": "Search Teacher",
                 "api": "/Teacher/search",
-                "header": "main",
                 "filters": [
                     {
                         "key": "board",
@@ -157,7 +155,6 @@
                 "tab": "student",
                 "tabTitle": "Search Student",
                 "api": "/Student/search",
-                "header": "main",
                 "filters": [
                     {
                         "key": "board",
