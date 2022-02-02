@@ -12,7 +12,7 @@
         },
         "signature": {
           "type": "string",
-          "description": "digital signature after attestion. Contains attested data, attestorInfo and verification details"
+          "description": "digital signature after attestation. Contains attested data, attestorInfo and verification details"
         }
       }
     }
