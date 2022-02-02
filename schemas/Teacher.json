@@ -91,7 +91,15 @@
         "conditions": "(ATTESTOR#$.instituteName#.contains(REQUESTER#$.institute#))"
       }
     ],
-    "subjectJsonPath": "mobile",
-    "internalFields": []
+    "internalFields": [],
+    "inviteRoles":["anonymous"],
+    "enableLogin": true,
+    "ownershipAttributes": [
+      {
+        "email":"/ContactDetails/email",
+        "mobile":"/ContactDetails/mobile",
+        "userId":"/ContactDetails/mobile"
+      }
+    ]
   }
 }
