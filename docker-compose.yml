@@ -1,6 +1,10 @@
 version: "2.4"
 
 services:
+  mock-sms:
+    image: dockerhub/sms-service
+    ports:
+      - "8765:8765"
   redis:
     image: redis
     ports:
@@ -27,7 +31,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   registry:
-    image: dockerhub/sunbird-rc-core
+    image: dockerhub/sunbird-rc-core:latest
     environment:
       - authentication_enabled=true
       - signature_enabled=false
@@ -39,9 +43,12 @@ services:
       - sunbird_sso_realm=sunbird-rc
       - sunbird_sso_url=http://keycloak:8080/auth
       - sunbird_sso_admin_client_id=admin-api
-      - sunbird_sso_admin_client_secret=6200803b-668d-43ae-8a6f-851bef724b9d
+      - sunbird_sso_admin_client_secret=014b8593-b82e-4f65-ae7a-b287c737fca4
       - sunbird_sso_client_id=registry-frontend
       - claims_url=http://claim-ms:8082
+      - sunbird_set_default_password=true
+      - sunbird_default_password=abcd@123
+      - logging.level.root=DEBUG
     ports:
       - "8081:8081"
     volumes: 
@@ -82,6 +89,7 @@ services:
       - connectionInfo_username=postgres
       - connectionInfo_password=postgres
       - sunbirdrc_url=http://registry:8081
+      - logging.level.root=DEBUG
     ports:
       - "8082:8082"
     depends_on:

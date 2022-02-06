@@ -49,6 +49,10 @@
       "description": "Contact Details",
       "required": [],
       "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
         "email": {
           "$id": "#/properties/email",
           "type": "string",

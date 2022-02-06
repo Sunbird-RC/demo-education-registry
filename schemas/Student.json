@@ -76,13 +76,31 @@
     ],
     "attestationPolicies": [
       {
-        "property": "educationDetails/[]",
+        "name": "schoolId",
+        "additionalInput": {
+          "enrollmentNumber": {"type": "string"}
+        },
+        "attestationProperties": {
+          "name": "$.identityDetails.fullName",
+          "institute": "$.educationDetails[0].institute"
+        },
         "paths": ["$.educationDetails[?(@.osid == 'PROPERTY_ID')]['institute', 'program', 'graduationYear', 'marks']", "$.identityDetails['fullName']"],
         "type": "MANUAL",
         "attestorEntity": "Teacher",
-        "conditions": "(ATTESTOR#$.experience.[*].institute#.contains(REQUESTER#$.institute#) && ATTESTOR#$.experience[?(@.institute == REQUESTER#$.institute#)]['_osState']#.contains('PUBLISHED'))"
+        "conditions": "(ATTESTOR#$.experience.[*].institute#.contains(REQUESTER#$.institute#))",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=Teacher",
+        "credentialTemplate": {}
       }
     ],
-    "subjectJsonPath": "mobile"
+    "inviteRoles":["anonymous"],
+    "enableLogin": true,
+    "ownershipAttributes": [
+      {
+        "email":"/ContactDetails/email",
+        "mobile":"/ContactDetails/mobile",
+        "userId":"/ContactDetails/mobile"
+      }
+    ]
+
   }
 }
