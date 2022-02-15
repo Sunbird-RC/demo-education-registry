@@ -80,7 +80,7 @@
           "experience"
         ],
         "attestorEntity": "Institute",
-        "conditions": "(ATTESTOR#$.instituteName#.contains(REQUESTER#$.institute#))"
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.instituteOSID#))"
       },
       {
         "property": "academicQualifications/[]",
@@ -88,7 +88,7 @@
           "academicQualifications"
         ],
         "attestorEntity": "Institute",
-        "conditions": "(ATTESTOR#$.instituteName#.contains(REQUESTER#$.institute#))"
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.instituteOSID#))"
       }
     ],
     "internalFields": [],
@@ -96,9 +96,9 @@
     "enableLogin": true,
     "ownershipAttributes": [
       {
-        "email":"/ContactDetails/email",
-        "mobile":"/ContactDetails/mobile",
-        "userId":"/ContactDetails/mobile"
+        "email": "/contactDetails/email",
+        "mobile": "/contactDetails/mobile",
+        "userId": "/contactDetails/mobile"
       }
     ]
   }

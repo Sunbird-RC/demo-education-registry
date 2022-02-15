@@ -111,6 +111,7 @@
       "properties": {
         "medium": {
           "type": "string",
+          "enum": ["English", "Hindi", "Gujarati", "Malayalam", "Tamil"],
           "title": "Medium of Education"
         },
         "board": {
@@ -132,7 +133,22 @@
         "classes": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "Pre-Pri.",
+              "Class I",
+              "Class II",
+              "Class III",
+              "Class IV",
+              "Class V",
+              "Class VI",
+              "Class VII",
+              "Class VIII",
+              "Class IX",
+              "Class X",
+              "Class XI",
+              "Class XII"
+            ]
           },
           "title": "Classes / Grades"
         }
@@ -169,6 +185,20 @@
         "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))"
       }
     ],
-    "subjectJsonPath": "email"
+    "internalFields": [],
+    "inviteRoles":["anonymous"],
+    "enableLogin": true,
+    "ownershipAttributes": [
+      {
+        "email": "/email",
+        "mobile": "/contactNumber",
+        "userId": "/email"
+      },
+      {
+        "email": "/adminEmail",
+        "mobile": "/adminMobile",
+        "userId": "/adminEmail"
+      }
+    ]
   }
 }
