@@ -51,6 +51,10 @@ services:
       - sunbird_keycloak_user_set_password=true
       - sunbird_keycloak_user_password=abcd@123
       - logging.level.root=DEBUG
+      - filestorage_connection_url=http://file-storage:9000
+      - filestorage_access_key=admin
+      - filestorage_secret_key=ced9862ea6
+      - filestorage_bucket_key=elocker
     ports:
       - "8081:8081"
     volumes: 
@@ -100,3 +104,19 @@ services:
         condition: service_started
       registry:
         condition: service_started
+  file-storage:
+    image: quay.io/minio/minio
+    volumes:
+      - ./minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=ced9862ea6
+    command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
