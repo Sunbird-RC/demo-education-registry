@@ -1,10 +1,6 @@
 version: "2.4"
 
 services:
-  mock-sms:
-    image: dockerhub/sms-service
-    ports:
-      - "8765:8765"
   redis:
     image: redis
     ports:
@@ -25,7 +21,7 @@ services:
   db:
     image: postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
@@ -45,7 +41,7 @@ services:
       - sunbird_sso_realm=sunbird-rc
       - sunbird_sso_url=http://keycloak:8080/auth
       - sunbird_sso_admin_client_id=admin-api
-      - sunbird_sso_admin_client_secret=014b8593-b82e-4f65-ae7a-b287c737fca4
+      - sunbird_sso_admin_client_secret=daea20dd-845b-4491-ae54-f374fe1950ae
       - sunbird_sso_client_id=registry-frontend
       - claims_url=http://claim-ms:8082
       - sunbird_keycloak_user_set_password=true
@@ -54,7 +50,7 @@ services:
       - filestorage_connection_url=http://file-storage:9000
       - filestorage_access_key=admin
       - filestorage_secret_key=ced9862ea6
-      - filestorage_bucket_key=elocker
+      - filestorage_bucket_key=ndear
     ports:
       - "8081:8081"
     volumes: 
