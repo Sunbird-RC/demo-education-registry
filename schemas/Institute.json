@@ -176,13 +176,14 @@
     ],
     "attestationPolicies": [
       {
-        "property": "affiliation/[]",
-        "paths": [
-          "affiliation",
-          "instituteName"
-        ],
-        "attestorEntity": "board-cbse",
-        "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))"
+        "name": "instituteAffiliation",
+        "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))",
+        "type": "MANUAL",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=board-cbse",
+        "attestationProperties": {
+          "affiliation": "$.affiliation",
+          "instituteName": "$.instituteName"
+        }
       }
     ],
     "internalFields": [],

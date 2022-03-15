@@ -213,6 +213,11 @@
           "type": "string",
           "title": "Institute Name"
         },
+        "instituteOSID": {
+          "$id": "#/properties/instituteOSID",
+          "type": "string",
+          "title": "Institute Osid"
+        },
         "board": {
           "$id": "#/properties/board",
           "type": "string",
