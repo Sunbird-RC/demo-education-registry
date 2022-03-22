@@ -652,7 +652,18 @@
           "value": "abcd@123"
         }
       ],
-      "groups": ["board-cbse"]
+      "groups": ["board-cbse"],
+      "attributes": {
+        "email_id": [
+          "cbse-admin"
+        ],
+        "mobile_number": [
+          "cbse-admin"
+        ],
+        "entity": [
+          "board-cbse"
+        ]
+      }
     }
   ],
   "scopeMappings": [
