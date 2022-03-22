@@ -192,7 +192,7 @@
     "ownershipAttributes": [
       {
         "email": "/email",
-        "mobile": "/contactNumber",
+        "mobile": "/email",
         "userId": "/email"
       },
       {
