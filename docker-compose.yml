@@ -20,6 +20,8 @@ services:
       retries: 4
   db:
     image: postgres
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
@@ -27,7 +29,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   registry:
-    image: dockerhub/sunbird-rc-core
+    image: dockerhub/sunbird-rc-core:v0.0.5
     environment:
       - authentication_enabled=true
       - signature_enabled=false
@@ -37,11 +39,18 @@ services:
       - elastic_search_connection_url=es:9200
       - search_provider=dev.sunbirdrc.registry.service.ElasticSearchService
       - sunbird_sso_realm=sunbird-rc
-      - sunbird_sso_url=http://keycloak:8080/auth
+      - sunbird_sso_url=https://ndear.xiv.in/auth
       - sunbird_sso_admin_client_id=admin-api
-      - sunbird_sso_admin_client_secret=6200803b-668d-43ae-8a6f-851bef724b9d
+      - sunbird_sso_admin_client_secret=d112548e-09b8-411d-a1e0-b5870247affa
       - sunbird_sso_client_id=registry-frontend
       - claims_url=http://claim-ms:8082
+      - sunbird_keycloak_user_set_password=true
+      - sunbird_keycloak_user_password=abcd@123
+      - filestorage_connection_url=http://file-storage:9000
+      - filestorage_access_key=admin
+      - filestorage_secret_key=ced9862ea6
+      - filestorage_bucket_key=ndear
+      - external_entities=board-cbse
     ports:
       - "8081:8081"
     volumes: 
@@ -53,6 +62,8 @@ services:
         condition: service_started
   keycloak:
     image: dockerhub/ndear-keycloak
+    volumes:
+      - ${PWD}/imports:/opt/jboss/keycloak/imports
     environment:
       - DB_VENDOR=postgres
       - DB_ADDR=db
@@ -62,6 +73,8 @@ services:
       - DB_PASSWORD=postgres
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/opt/jboss/keycloak/imports/realm-export.json
+      - PROXY_ADDRESS_FORWARDING=true
     healthcheck:
       test:
         ["CMD-SHELL", "curl -f http://localhost:9990/ || exit 1"]
@@ -75,13 +88,13 @@ services:
       db:
         condition: service_started
   claim-ms:
-    image: dockerhub/open-saber-claim-ms
-    #image: dockerhub/sunbird-rc-claim-ms
+    image: dockerhub/sunbird-rc-claim-ms:v0.0.5
     environment:
       - connectionInfo_uri=jdbc:postgresql://db:5432/registry
       - connectionInfo_username=postgres
       - connectionInfo_password=postgres
       - sunbirdrc_url=http://registry:8081
+      - logging.level.root=DEBUG
     ports:
       - "8082:8082"
     depends_on:
@@ -89,3 +102,19 @@ services:
         condition: service_started
       registry:
         condition: service_started
+  file-storage:
+    image: quay.io/minio/minio
+    volumes:
+      - ./minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=ced9862ea6
+    command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3

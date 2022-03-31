@@ -29,17 +29,28 @@
           "format": "date",
           "title": "DOB"
         },
-        "identityType": {
-          "$id": "#/properties/identityType",
-          "type": "string",
-          "$comment": "Nationality",
-          "title": "ID Type"
-        },
-        "identityValue": {
-          "$id": "#/properties/identityValue",
-          "type": "string",
-          "$comment": "Nationality",
-          "title": "ID Value"
+        "identityHolder": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "$id": "#/properties/type",
+              "type": "string",
+              "$comment": "Nationality",
+              "title": "ID Type",
+              "enum": [
+                "AADHAR",
+                "PAN",
+                "LICENSE",
+                "OTHER"
+              ]
+            },
+            "value": {
+              "$id": "#/properties/value",
+              "type": "string",
+              "$comment": "Nationality",
+              "title": "ID Value"
+            }
+          }
         }
       }
     },
@@ -69,10 +80,15 @@
     "AcademicQualification": {
       "type": "object",
       "properties": {
-        "institute": {
-          "$id": "#/properties/institute",
+        "instituteOSID": {
+          "$id": "#/properties/instituteOSID",
           "type": "string",
-          "title": "Institute Full Name"
+          "title": "Institute OSID"
+        },
+        "instituteName": {
+          "$id": "#/properties/instituteName",
+          "type": "string",
+          "title": "Institute Name"
         },
         "qualification": {
           "$id": "#/properties/qualification",
@@ -99,10 +115,15 @@
     "ExperienceType": {
       "type": "object",
       "properties": {
-        "institute": {
-          "$id": "#/properties/institute",
+        "instituteOSID": {
+          "$id": "#/properties/instituteOSID",
           "type": "string",
-          "title": "Institute Full Name"
+          "title": "Institute OSID"
+        },
+        "instituteName": {
+          "$id": "#/properties/instituteName",
+          "type": "string",
+          "title": "Institute Name"
         },
         "employmentType": {
           "$id": "#/properties/employmentType",
@@ -131,40 +152,55 @@
           "title": "Teacher Type",
           "enum": [
             "Head teacher",
+            "Acting head teacher",
+            "Teacher",
+            "Instructor positioned as per RTE",
             "Principal",
             "VicePrincipal",
-            "Lecture"
+            "Lecturer"
           ]
         },
-        "subjects": {
-          "$id": "#/properties/subjects",
+        "subjectsTaught": {
+          "$id": "#/properties/subjectsTaught",
+          "title": "Subjects Taught",
           "type": "array",
-          "title": "Subjects teaching at this Institute",
           "items": {
-            "type": "string"
-          }
-        },
-        "grades": {
-          "$id": "#/properties/grades",
-          "type": "array",
-          "title": "Grades Taught (per subject taught)",
-          "items": {
-            "type": "string",
-            "enum": [
-              "Pre-Pri.",
-              "Class I",
-              "Class II",
-              "Class III",
-              "Class IV",
-              "Class V",
-              "Class VI",
-              "Class VII",
-              "Class VIII",
-              "Class IX",
-              "Class X",
-              "Class XI",
-              "Class XII"
-            ]
+            "type": "object",
+            "properties": {
+              "subjects": {
+                "$id": "#/properties/subjects",
+                "type": "string",
+                "title": "Subject",
+                "enum": [
+                  "English",
+                  "Kannada",
+                  "Mathematics",
+                  "Science",
+                  "Social Science",
+                  "Art"
+                ]
+              },
+              "grades": {
+                "$id": "#/properties/grades",
+                "type": "string",
+                "title": "Grades",
+                "enum": [
+                  "Pre-Pri.",
+                  "Class I",
+                  "Class II",
+                  "Class III",
+                  "Class IV",
+                  "Class V",
+                  "Class VI",
+                  "Class VII",
+                  "Class VIII",
+                  "Class IX",
+                  "Class X",
+                  "Class XI",
+                  "Class XII"
+                ]
+              }
+            }
           }
         }
       }
@@ -177,6 +213,11 @@
           "type": "string",
           "title": "Institute Name"
         },
+        "instituteOSID": {
+          "$id": "#/properties/instituteOSID",
+          "type": "string",
+          "title": "Institute Osid"
+        },
         "board": {
           "$id": "#/properties/board",
           "type": "string",
@@ -185,6 +226,13 @@
         "medium": {
           "$id": "#/properties/program",
           "type": "string",
+          "enum": [
+            "English",
+            "Hindi",
+            "Gujarati",
+            "Malayalam",
+            "Tamil"
+          ],
           "title": "Medium of Education"
         },
         "class": {
@@ -206,6 +254,19 @@
             "Class XII"
           ],
           "title": "Current Enrollment Class / Std."
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fileName": {
+                "type": "string",
+                "format": "file"
+              }
+            }
+          },
+          "title": "Education related documents"
         }
       }
     },
@@ -215,15 +276,12 @@
         "fullName": {
           "$id": "#/properties/fullName",
           "type": "string",
-          "title": "Full Name"
+          "title": "Guardian's Full Name"
         },
         "relation": {
           "$id": "#/properties/relation",
           "type": "string",
-          "title": "Relation type"
-        },
-        "email": {
-          "$ref": "#/definitions/ContactDetails/properties/email"
+          "title": "Guardian Relation type"
         }
       }
     },
@@ -243,10 +301,18 @@
         }
       }
     },
+    "Document": {
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "format": "file"
+        }
+      }
+    },
     "Address": {
       "type": "object",
       "required": [
-
       ],
       "properties": {
         "plot": {
@@ -267,7 +333,46 @@
         },
         "state": {
           "type": "string",
-          "title": "State"
+          "title": "State",
+          "enum": [
+            "Andaman and Nicobar Islands",
+            "Andhra Pradesh",
+            "Arunachal Pradesh",
+            "Assam",
+            "Bihar",
+            "Chandigarh",
+            "Chhattisgarh",
+            "Dadra and Nagar Haveli",
+            "Daman and Diu",
+            "Delhi",
+            "Goa",
+            "Gujarat",
+            "Haryana",
+            "Himachal Pradesh",
+            "Jammu and Kashmir",
+            "Jharkhand",
+            "Karnataka",
+            "Kerala",
+            "Ladakh",
+            "Lakshadweep",
+            "Madhya Pradesh",
+            "Maharashtra",
+            "Manipur",
+            "Meghalaya",
+            "Mizoram",
+            "Nagaland",
+            "Odisha",
+            "Puducherry",
+            "Punjab",
+            "Rajasthan",
+            "Sikkim",
+            "Tamil Nadu",
+            "Telangana",
+            "Tripura",
+            "Uttar Pradesh",
+            "Uttarakhand",
+            "West Bengal"
+          ]
         },
         "district": {
           "type": "string",

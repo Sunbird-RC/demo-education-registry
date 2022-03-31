@@ -75,20 +75,22 @@
     ],
     "attestationPolicies": [
       {
-        "property": "experience/[]",
-        "paths": [
-          "experience"
-        ],
-        "attestorEntity": "Institute",
-        "conditions": "(ATTESTOR#$.instituteName#.contains(REQUESTER#$.institute#))"
+        "name": "teacherExperience",
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.experience.*.instituteOSID#))",
+        "type": "MANUAL",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=Institute",
+        "attestationProperties": {
+          "experience": "$.experience"
+        }
       },
       {
-        "property": "academicQualifications/[]",
-        "paths": [
-          "academicQualifications"
-        ],
-        "attestorEntity": "Institute",
-        "conditions": "(ATTESTOR#$.instituteName#.contains(REQUESTER#$.institute#))"
+        "name": "teacherAcademicsQualification",
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.academicQualifications.*.instituteOSID#))",
+        "type": "MANUAL",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=Institute",
+        "attestationProperties": {
+          "academicQualifications": "$.academicQualifications"
+        }
       }
     ],
     "internalFields": [],
@@ -96,9 +98,9 @@
     "enableLogin": true,
     "ownershipAttributes": [
       {
-        "email":"/ContactDetails/email",
-        "mobile":"/ContactDetails/mobile",
-        "userId":"/ContactDetails/mobile"
+        "email": "/contactDetails/email",
+        "mobile": "/contactDetails/mobile",
+        "userId": "/contactDetails/mobile"
       }
     ]
   }

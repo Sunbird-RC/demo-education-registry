@@ -111,6 +111,7 @@
       "properties": {
         "medium": {
           "type": "string",
+          "enum": ["English", "Hindi", "Gujarati", "Malayalam", "Tamil"],
           "title": "Medium of Education"
         },
         "board": {
@@ -132,7 +133,22 @@
         "classes": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "Pre-Pri.",
+              "Class I",
+              "Class II",
+              "Class III",
+              "Class IV",
+              "Class V",
+              "Class VI",
+              "Class VII",
+              "Class VIII",
+              "Class IX",
+              "Class X",
+              "Class XI",
+              "Class XII"
+            ]
           },
           "title": "Classes / Grades"
         }
@@ -160,15 +176,30 @@
     ],
     "attestationPolicies": [
       {
-        "property": "affiliation/[]",
-        "paths": [
-          "affiliation",
-          "instituteName"
-        ],
-        "attestorEntity": "board-cbse",
-        "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))"
+        "name": "instituteAffiliation",
+        "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))",
+        "type": "MANUAL",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=board-cbse",
+        "attestationProperties": {
+          "affiliation": "$.affiliation",
+          "instituteName": "$.instituteName"
+        }
       }
     ],
-    "subjectJsonPath": "email"
+    "internalFields": [],
+    "inviteRoles":["anonymous"],
+    "enableLogin": true,
+    "ownershipAttributes": [
+      {
+        "email": "/email",
+        "mobile": "/email",
+        "userId": "/email"
+      },
+      {
+        "email": "/adminEmail",
+        "mobile": "/adminMobile",
+        "userId": "/adminEmail"
+      }
+    ]
   }
 }
