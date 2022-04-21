@@ -1,5 +1,5 @@
 # edu-core-registries
-Edu Core Registries
+Edu Core Registries (reference https://docs.sunbirdrc.dev/example-use-cases/edu-registries) 
 
 ## Running
 1. Clone the repository  
