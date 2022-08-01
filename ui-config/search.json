@@ -12,12 +12,6 @@
                 "activeTab": "active",
                 "filters": [
                     {
-                        "key": "board",
-                        "type": "text",
-                        "title": "Board",
-                        "propertyPath": "affiliation.board"
-                    },
-                    {
                         "key": "instituteName",
                         "type": "autocomplete",
                         "title": "Institute Name",
