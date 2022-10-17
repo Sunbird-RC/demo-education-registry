@@ -121,7 +121,7 @@ services:
       timeout: 10s
       retries: 4
     volumes:
-      - ./deps:/etc/keys
+      - ./imports:/etc/keys
   context-proxy-service:
     image: dockerhub/sunbird-rc-context-proxy-service:${RELEASE_VERSION}
     healthcheck:
