@@ -85,6 +85,14 @@
         "attributes": {}
       },
       {
+        "id": "5556c82f-730e-4725-b130-b4f794523d67",
+        "name": "board-state",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "sunbird-rc",
+        "attributes": {}
+      },
+      {
         "id": "30d1a784-d1af-43c0-9c86-8a3679503dee",
         "name": "offline_access",
         "description": "${role_offline-access}",
@@ -472,6 +480,17 @@
       "subGroups": []
     },
     {
+      "id": "405e14d6-cc32-4859-95cc-8d233dfd82e9",
+      "name": "board-state",
+      "path": "/board-state",
+      "attributes": {},
+      "realmRoles": [
+        "board-state"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
       "id": "5ea4e456-bf79-4a16-8903-ce6b95d9f328",
       "name": "controller",
       "path": "/controller",
@@ -662,6 +681,28 @@
         ],
         "entity": [
           "board-cbse"
+        ]
+      }
+    },
+    {
+      "username": "state-admin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "abcd@123"
+        }
+      ],
+      "groups": ["board-state"],
+      "attributes": {
+        "email_id": [
+          "state-admin"
+        ],
+        "mobile_number": [
+          "state-admin"
+        ],
+        "entity": [
+          "board-state"
         ]
       }
     }
