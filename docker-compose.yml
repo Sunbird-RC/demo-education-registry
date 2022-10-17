@@ -6,9 +6,6 @@ services:
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     healthcheck:
       test: ["CMD", "curl", "-f", "localhost:9200/_cluster/health"]
       interval: 30s
@@ -18,8 +15,6 @@ services:
     image: postgres
     volumes:
       - ./db-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_DB=registry
       - POSTGRES_USER=postgres
@@ -58,9 +53,7 @@ services:
       - async_enabled=false
       - webhook_enabled=false
       - webhook_url=http://localhost:5001/api/v1/callback
-    ports:
-      - "8081:8081"
-    volumes: 
+    volumes:
       - ${PWD}/schemas:/home/sunbirdrc/config/public/_schemas
     depends_on:
       es:
@@ -89,9 +82,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    ports:
-      - "8080:8080"
-      - "9990:9990"
     depends_on:
       db:
         condition: service_started
@@ -103,8 +93,6 @@ services:
       - connectionInfo_password=postgres
       - sunbirdrc_url=http://registry:8081
       - logging.level.root=DEBUG
-    ports:
-      - "8082:8082"
     depends_on:
       db:
         condition: service_started
@@ -118,11 +106,12 @@ services:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=ced9862ea6
     command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
-    ports:
-      - "9000:9000"
-      - "9001:9001"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
       interval: 30s
       timeout: 20s
       retries: 3
+  nginx:
+    image: dockerhub/sunbird-rc-nginx
+    ports:
+      - "83:80"
