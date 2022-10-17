@@ -76,6 +76,8 @@ services:
       - KEYCLOAK_PASSWORD=admin
       - KEYCLOAK_IMPORT=/opt/jboss/keycloak/imports/realm-export.json
       - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_PORTAL_TITLE=Login to Sunbird RC education portal
+      - KEYCLOAK_PORTAL_SUB_TITLE=Create and manage your school registeries
     healthcheck:
       test:
         ["CMD-SHELL", "curl -f http://localhost:9990/ || exit 1"]
