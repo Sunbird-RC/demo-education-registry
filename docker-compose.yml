@@ -65,7 +65,7 @@ services:
     volumes:
       - ${PWD}/imports:/opt/jboss/keycloak/imports
     environment:
-      - KEYCLOAK_LOGO=https://svgshare.com/i/hCr.svg
+      - KEYCLOAK_LOGO=https://raw.githubusercontent.com/Sunbird-RC/demo-education-registry/main/assets/education_portal.svg
       - DB_VENDOR=postgres
       - DB_ADDR=db
       - DB_PORT=5432
