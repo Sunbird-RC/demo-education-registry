@@ -20,7 +20,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   registry:
-    image: dockerhub/sunbird-rc-core:v0.0.9-5
+    image: dockerhub/sunbird-rc-core:v0.0.9-7
     environment:
       - authentication_enabled=true
       - signature_enabled=false
