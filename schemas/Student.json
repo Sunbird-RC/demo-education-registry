@@ -58,21 +58,13 @@
       "$.contactDetails.address.landmark",
       "$.contactDetails.address.locality"
     ],
-    "signedFields": [],
     "indexFields": ["studentName"],
     "uniqueIndexFields": ["identityValue"],
     "systemFields": [
-      "_osCreatedAt",
-      "_osUpdatedAt",
-      "_osCreatedBy",
-      "_osUpdatedBy",
-      "_osAttestedData",
-      "_osClaimId",
-      "_osState"
-    ],
-    "attestationAttributes": [
-      "educationDetails",
-      "nationalIdentifier"
+      "osCreatedAt",
+      "osUpdatedAt",
+      "osCreatedBy",
+      "osUpdatedBy"
     ],
     "attestationPolicies": [
       {
@@ -89,8 +81,7 @@
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Teacher"
       }
     ],
-    "inviteRoles":["anonymous"],
-    "enableLogin": true,
+    "inviteRoles":["Teacher"],
     "ownershipAttributes": [
       {
         "email": "/contactDetails/email",

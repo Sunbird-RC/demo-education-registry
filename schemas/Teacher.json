@@ -53,8 +53,8 @@
     ],
     "privateFields": [
       "$.identityDetails.dob",
-      "$.identityDetails.identityType",
-      "$.identityDetails.identityValue",
+      "$.identityDetails.identityHolder.type",
+      "$.identityDetails.identityHolder.value",
       "$.contactDetails.email",
       "$.contactDetails.mobile",
       "$.contactDetails.address.plot",
@@ -62,11 +62,9 @@
       "$.contactDetails.address.landmark",
       "$.contactDetails.address.locality"
     ],
-    "signedFields": [],
+    "internalFields": [],
     "indexFields": [],
-    "uniqueIndexFields": [
-      "identityValue"
-    ],
+    "uniqueIndexFields": [],
     "systemFields": [
       "osCreatedAt",
       "osUpdatedAt",
@@ -93,9 +91,7 @@
         }
       }
     ],
-    "internalFields": [],
-    "inviteRoles":["anonymous"],
-    "enableLogin": true,
+    "inviteRoles":["Institute"],
     "ownershipAttributes": [
       {
         "email": "/contactDetails/email",
