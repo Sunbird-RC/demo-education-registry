@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "5a1c2760-9c23-4570-b88b-9a6b8d5bd7a4",
+		"name": "Tech Webinar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sunbird RC Health API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invite institute (name validation issue)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"instituteName\": \"svg\",\n   \"establishmentYear\": 195,\n   \"contactNumber\": \"100\",\n   \"email\": \"demo\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invite institute (valid)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"instituteName\": \"svg institute\",\n   \"establishmentYear\": 1990,\n   \"contactNumber\": \"7766663535\",\n   \"email\": \"svg@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invite institute (duplicate issue)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"instituteName\": \"svg institute\",\n   \"establishmentYear\": 1990,\n   \"contactNumber\": \"7766663535\",\n   \"email\": \"svg@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invite institute - 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"instituteName\": \"abc institute\",\n   \"establishmentYear\": 1995,\n   \"contactNumber\": \"7766663541\",\n   \"email\": \"xyz@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes (empty)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes (contains)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"instituteName\": {\n            \"contains\": \"institute\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes (startsWith)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"instituteName\": {\n            \"startsWith\": \"sv\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes (greater than)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"establishmentYear\": {\n            \"gt\": 1995\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes (equal to)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"establishmentYear\": {\n            \"eq\": 1990\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get institute token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"institute_token\", jsonData.access_token);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "registry-frontend",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "svg@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abcd@123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://keycloak:8080/auth/realms/education/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"keycloak"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"education",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get institute details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Teacher invite (without token)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"identityDetails\": {\n       \"fullName\": \"sam\",\n       \"gender\": \"Male\",\n       \"identityHolder\": {\n           \"type\": \"AADHAR\",\n           \"value\": \"123123123\"\n       }\n   },\n   \"contactDetails\": {\n       \"email\": \"teacher1@svg.com\",\n       \"mobile\": \"8877665544\"\n   }\n   \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Teacher/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Teacher",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Teacher invite",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"identityDetails\": {\n       \"fullName\": \"sam\",\n       \"gender\": \"Male\",\n       \"identityHolder\": {\n           \"type\": \"AADHAR\",\n           \"value\": \"123123123\"\n       }\n   },\n   \"contactDetails\": {\n       \"email\": \"teacher1@svg.com\",\n       \"mobile\": \"8877665544\"\n   }\n   \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Teacher/invite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Teacher",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search teacher",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Teacher/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Teacher",
+						"search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
