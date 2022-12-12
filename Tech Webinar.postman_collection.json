@@ -186,7 +186,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"filters\": {\n        \"instituteName\": {\n            \"contains\": \"institute\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"raw": "{\n    \"filters\": {\n        \"instituteName\": {\n            \"contains\": \"svg\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -248,7 +248,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"filters\": {\n        \"establishmentYear\": {\n            \"gt\": 1995\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"raw": "{\n    \"filters\": {\n        \"establishmentYear\": {\n            \"gt\": 1990\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -370,6 +370,24 @@
 		},
 		{
 			"name": "get institute details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"instituteId\", jsonData[0].osid);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -400,8 +418,279 @@
 			"response": []
 		},
 		{
-			"name": "Teacher invite (without token)",
+			"name": "update institute details",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": {\n        \"plot\": \"19\",\n        \"street\": \"3rd cross\",\n        \"landmark\": \"\",\n        \"locality\": \"Koramangala\",\n        \"state\": \"Karnataka\",\n        \"district\": \"Bangalore\",\n        \"village\": \"Bangalore\",\n        \"pincode\": \"560029\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/{{instituteId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"{{instituteId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get institute details after update",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes after update",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"instituteName\": {\n            \"contains\": \"svg\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes by address",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \"address.state\": {\n            \"eq\": \"Karnataka\"\n        }\n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete institute",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": {\n        \"plot\": \"19\",\n        \"street\": \"3rd cross\",\n        \"landmark\": \"\",\n        \"locality\": \"Koramangala\",\n        \"state\": \"Karnataka\",\n        \"district\": \"Bangalore\",\n        \"village\": \"Bangalore\",\n        \"pincode\": \"560029\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/{{instituteId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"{{instituteId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get institute details after delete",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{institute_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search institutes after delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filters\": {\n        \n    },\n    \"limit\": 5,\n    \"offset\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/Institute/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"Institute",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Teacher invite (without token)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const jar = pm.cookies.jar();",
+							"",
+							"jar.clear(pm.request.url, function (error) {",
+							"  // error - <Error>",
+							"  console.log(error)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -432,6 +721,9 @@
 		},
 		{
 			"name": "Teacher invite",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
