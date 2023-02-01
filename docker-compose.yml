@@ -32,7 +32,12 @@ services:
     image: tejashjl/sunbird-rc-core:v0.0.13-5
     environment:
       - authentication_enabled=true
-      - signature_enabled=false
+      - signature_enabled=true
+      - pdf_url=http://certificate-api:8078/api/v1/certificatePDF
+      - certificate_health_check_url=http://certificate-api:8078/health
+      - sign_url=http://certificate-signer:8079/sign
+      - sign_health_check_url=http://certificate-signer:8079/health
+      - enable_external_templates=true
       - connectionInfo_uri=jdbc:postgresql://db:5432/registry
       - connectionInfo_username=postgres
       - connectionInfo_password=postgres
@@ -118,3 +123,29 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+  certificate-signer:
+    image: dockerhub/sunbird-rc-certificate-signer
+    environment:
+      - PORT=8079
+    ports:
+      - "8079:8079"
+    volumes:
+      - ./imports:/etc/signer
+    healthcheck:
+      test:
+        [ "CMD-SHELL", "curl -f http://localhost:8079/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  certificate-api:
+    image: dockerhub/sunbird-rc-certificate-api
+    environment:
+      - PORT=8078
+    ports:
+      - "8078:8078"
+    healthcheck:
+      test:
+        [ "CMD-SHELL", "wget -nv -t1 --spider http://localhost:8078/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
