@@ -84,7 +84,7 @@
           "name": "$.identityDetails.fullName",
           "educationDetails": "$.educationDetails"
         },
-        "type": "MANUAL",
+        "type": "AUTOMATED",
         "conditions": "(ATTESTOR#$.experience.[*].instituteOSID#.contains(REQUESTER#$.educationDetails.*.instituteOSID#))",
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Teacher"
       }
