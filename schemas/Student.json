@@ -87,6 +87,20 @@
         "type": "MANUAL",
         "conditions": "(ATTESTOR#$.experience.[*].instituteOSID#.contains(REQUESTER#$.educationDetails.*.instituteOSID#))",
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Teacher"
+      },
+      {
+        "name": "studentBoardAttest",
+        "additionalInput": {
+          "signedData": {"type": "array", "items": {"type": "string"}}
+        },
+        "attestationProperties": {
+          "name": "$.identityDetails.fullName",
+          "educationDetails": "$.educationDetails",
+          "contactDetails": "$.contactDetails"
+        },
+        "type": "MANUAL",
+        "conditions": "(ATTESTOR#$.[*]#.contains('board-cbse'))",
+        "attestorPlugin": "did:internal:ClaimPluginActor?entity=board-cbse"
       }
     ],
     "inviteRoles":["anonymous"],
