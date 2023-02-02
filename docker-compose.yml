@@ -1,5 +1,11 @@
 version: "2.4"
-
+x-redash-service: &redash-service
+  image: redash/redash:8.0.0.b32245
+  depends_on:
+    - db
+    - redis
+  env_file: ./.env
+  restart: always
 services:
   redis:
     image: redis
@@ -20,6 +26,7 @@ services:
       retries: 4
   db:
     image: postgres
+    env_file: ./.env
     volumes:
       - ./db-data:/var/lib/postgresql/data
     ports:
@@ -149,3 +156,37 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
+  server:
+    <<: *redash-service
+    command: server
+    ports:
+      - "5678:5000"
+    environment:
+      REDASH_WEB_WORKERS: 4
+  scheduler:
+    <<: *redash-service
+    command: scheduler
+    environment:
+      QUEUES: "celery"
+      WORKERS_COUNT: 1
+  scheduled_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      QUEUES: "scheduled_queries,schemas"
+      WORKERS_COUNT: 1
+  adhoc_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      QUEUES: "queries"
+      WORKERS_COUNT: 2
+  nginx:
+    image: redash/nginx:latest
+    ports:
+      - "81:80"
+    depends_on:
+      - server
+    links:
+      - server:redash
+    restart: always
