@@ -126,8 +126,8 @@ services:
       - MINIO_ROOT_PASSWORD=ced9862ea6
     command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9003:9000"
+      - "9002:9001"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
       interval: 30s
@@ -185,9 +185,9 @@ services:
       QUEUES: "queries"
       WORKERS_COUNT: 2
   nginx:
-    image: redash/nginx:latest
+    image: dockerhub/sunbird-rc-nginx
     ports:
-      - "81:80"
+      - "83:80"
     depends_on:
       - server
     links:
