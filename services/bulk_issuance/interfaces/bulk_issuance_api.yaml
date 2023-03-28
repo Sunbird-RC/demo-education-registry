@@ -1,0 +1,93 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Bulk Issuance
+  description: Bulk Issuance API
+security:
+  - hasRole: []
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/bulk/sample/{schemaName}:
+    get:
+      tags:
+        - sampleTemplate
+      summary: get sample template
+      produces:
+        - multipart/form-data
+      security: []
+      parameters:
+        - name: schemaName
+          in: path
+          required: true
+          type: string
+          description: schema name
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SampleTemplateResponse'
+  /v1/bulk/uploadedFiles:
+    get:
+      tags:
+        - uploadedFiles
+      summary: get uploaded files
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+  /v1/uploadFiles:
+    post:
+      tags:
+        - uploadAndCreateRecords
+      summary: upload the file and create records
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      security: []
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: Certification data in the form of csv
+      responses:
+        '200':
+          description: OK
+  /v1/download/{fileName}:
+    get:
+      tags:
+        - downloadFileReport
+      summary: download the success and error report of file uploaded
+      produces:
+        - multipart/form-data
+      security: []
+      parameters:
+        - name: fileName
+          in: path
+          required: true
+          type: string
+          description: File name
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/FileDownload'
+          
+
+definitions:
+  SampleTemplateResponse:
+    type: object
+  UploadedFiles:
+    type: object
+  FileDownload:
+    type: object
+  
