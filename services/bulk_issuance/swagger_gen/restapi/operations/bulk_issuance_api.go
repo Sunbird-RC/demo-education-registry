@@ -19,6 +19,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"bulk_issuance/swagger_gen/models"
 	"bulk_issuance/swagger_gen/restapi/operations/download_file_report"
 	"bulk_issuance/swagger_gen/restapi/operations/sample_template"
 	"bulk_issuance/swagger_gen/restapi/operations/upload_and_create_records"
@@ -58,9 +59,15 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		DownloadFileReportGetV1DownloadFileNameHandler: download_file_report.GetV1DownloadFileNameHandlerFunc(func(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
 		}),
-		UploadAndCreateRecordsPostV1UploadFilesHandler: upload_and_create_records.PostV1UploadFilesHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesParams) middleware.Responder {
-			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFiles has not yet been implemented")
+		UploadAndCreateRecordsPostV1UploadFilesVCNameHandler: upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFilesVCName has not yet been implemented")
 		}),
+
+		HasRoleAuth: func(token string, scopes []string) (*models.JWTClaimBody, error) {
+			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
+		},
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -101,14 +108,21 @@ type BulkIssuanceAPI struct {
 	//   - multipart/form-data
 	MultipartformProducer runtime.Producer
 
+	// HasRoleAuth registers a function that takes an access token and a collection of required scopes and returns a principal
+	// it performs authentication based on an oauth2 bearer token provided in the request
+	HasRoleAuth func(string, []string) (*models.JWTClaimBody, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
+
 	// SampleTemplateGetV1BulkSampleSchemaNameHandler sets the operation handler for the get v1 bulk sample schema name operation
 	SampleTemplateGetV1BulkSampleSchemaNameHandler sample_template.GetV1BulkSampleSchemaNameHandler
 	// UploadedFilesGetV1BulkUploadedFilesHandler sets the operation handler for the get v1 bulk uploaded files operation
 	UploadedFilesGetV1BulkUploadedFilesHandler uploaded_files.GetV1BulkUploadedFilesHandler
 	// DownloadFileReportGetV1DownloadFileNameHandler sets the operation handler for the get v1 download file name operation
 	DownloadFileReportGetV1DownloadFileNameHandler download_file_report.GetV1DownloadFileNameHandler
-	// UploadAndCreateRecordsPostV1UploadFilesHandler sets the operation handler for the post v1 upload files operation
-	UploadAndCreateRecordsPostV1UploadFilesHandler upload_and_create_records.PostV1UploadFilesHandler
+	// UploadAndCreateRecordsPostV1UploadFilesVCNameHandler sets the operation handler for the post v1 upload files v c name operation
+	UploadAndCreateRecordsPostV1UploadFilesVCNameHandler upload_and_create_records.PostV1UploadFilesVCNameHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -191,6 +205,10 @@ func (o *BulkIssuanceAPI) Validate() error {
 		unregistered = append(unregistered, "MultipartformProducer")
 	}
 
+	if o.HasRoleAuth == nil {
+		unregistered = append(unregistered, "HasRoleAuth")
+	}
+
 	if o.SampleTemplateGetV1BulkSampleSchemaNameHandler == nil {
 		unregistered = append(unregistered, "sample_template.GetV1BulkSampleSchemaNameHandler")
 	}
@@ -200,8 +218,8 @@ func (o *BulkIssuanceAPI) Validate() error {
 	if o.DownloadFileReportGetV1DownloadFileNameHandler == nil {
 		unregistered = append(unregistered, "download_file_report.GetV1DownloadFileNameHandler")
 	}
-	if o.UploadAndCreateRecordsPostV1UploadFilesHandler == nil {
-		unregistered = append(unregistered, "upload_and_create_records.PostV1UploadFilesHandler")
+	if o.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {
+		unregistered = append(unregistered, "upload_and_create_records.PostV1UploadFilesVCNameHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -218,12 +236,22 @@ func (o *BulkIssuanceAPI) ServeErrorFor(operationID string) func(http.ResponseWr
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *BulkIssuanceAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name := range schemes {
+		switch name {
+		case "hasRole":
+			result[name] = o.BearerAuthenticator(name, func(token string, scopes []string) (interface{}, error) {
+				return o.HasRoleAuth(token, scopes)
+			})
+
+		}
+	}
+	return result
 }
 
 // Authorizer returns the registered authorizer
 func (o *BulkIssuanceAPI) Authorizer() runtime.Authorizer {
-	return nil
+	return o.APIAuthorizer
 }
 
 // ConsumersFor gets the consumers for the specified media types.
@@ -310,7 +338,7 @@ func (o *BulkIssuanceAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/v1/uploadFiles"] = upload_and_create_records.NewPostV1UploadFiles(o.context, o.UploadAndCreateRecordsPostV1UploadFilesHandler)
+	o.handlers["POST"]["/v1/uploadFiles/{VCName}"] = upload_and_create_records.NewPostV1UploadFilesVCName(o.context, o.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP
