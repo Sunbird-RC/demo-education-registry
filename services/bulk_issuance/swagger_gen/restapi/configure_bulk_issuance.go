@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 
 	"bulk_issuance/pkg"
+	"bulk_issuance/swagger_gen/models"
 	"bulk_issuance/swagger_gen/restapi/operations"
 	"bulk_issuance/swagger_gen/restapi/operations/download_file_report"
 	"bulk_issuance/swagger_gen/restapi/operations/sample_template"
@@ -18,7 +19,7 @@ import (
 	"bulk_issuance/swagger_gen/restapi/operations/uploaded_files"
 )
 
-//go:generate swagger generate server --target ../../swagger_gen --name BulkIssuance --spec ../../../interfaces/bulk_issuance_api.yaml --principal models.JWTClaimBody --exclude-main
+//go:generate swagger generate server --target ../../swagger_gen --name BulkIssuance --spec ../../interfaces/bulk_issuance_api.yaml --principal models.JWTClaimBody --exclude-main
 
 func configureFlags(api *operations.BulkIssuanceAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -43,7 +44,18 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 	api.MultipartformProducer = runtime.DiscardProducer
+	api.HasRoleAuth = pkg.RoleAuthorizer
+	if api.HasRoleAuth == nil {
+		api.HasRoleAuth = func(token string, scopes []string) (*models.JWTClaimBody, error) {
+			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
+		}
+	}
 
+	// Set your custom authorizer if needed. Default one is security.Authorized()
+	// Expected interface runtime.Authorizer
+	//
+	// Example:
+	// api.APIAuthorizer = security.Authorized()
 	if api.SampleTemplateGetV1BulkSampleSchemaNameHandler == nil {
 		api.SampleTemplateGetV1BulkSampleSchemaNameHandler = sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
@@ -59,9 +71,9 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
 		})
 	}
-	if api.UploadAndCreateRecordsPostV1UploadFilesHandler == nil {
-		api.UploadAndCreateRecordsPostV1UploadFilesHandler = upload_and_create_records.PostV1UploadFilesHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesParams) middleware.Responder {
-			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFiles has not yet been implemented")
+	if api.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {
+		api.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler = upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFilesVCName has not yet been implemented")
 		})
 	}
 

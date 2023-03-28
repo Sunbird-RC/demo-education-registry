@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bulk_issuance/config"
+	"bulk_issuance/pkg"
 	"bulk_issuance/swagger_gen/restapi"
 	"bulk_issuance/swagger_gen/restapi/operations"
 	"log"
@@ -11,6 +13,8 @@ import (
 )
 
 func main() {
+	config.Initialize("./application-default.yml")
+	pkg.Init()
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
 	if err != nil {
 		log.Fatalln(err)

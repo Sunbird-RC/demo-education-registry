@@ -13,24 +13,30 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewPostV1UploadFilesParams creates a new PostV1UploadFilesParams object
+// NewPostV1UploadFilesVCNameParams creates a new PostV1UploadFilesVCNameParams object
 // no default values defined in spec.
-func NewPostV1UploadFilesParams() PostV1UploadFilesParams {
+func NewPostV1UploadFilesVCNameParams() PostV1UploadFilesVCNameParams {
 
-	return PostV1UploadFilesParams{}
+	return PostV1UploadFilesVCNameParams{}
 }
 
-// PostV1UploadFilesParams contains all the bound params for the post v1 upload files operation
+// PostV1UploadFilesVCNameParams contains all the bound params for the post v1 upload files v c name operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters PostV1UploadFiles
-type PostV1UploadFilesParams struct {
+// swagger:parameters PostV1UploadFilesVCName
+type PostV1UploadFilesVCNameParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*VerifiableCredential you are issuing
+	  Required: true
+	  In: path
+	*/
+	VCName string
 	/*Certification data in the form of csv
 	  In: formData
 	*/
@@ -40,8 +46,8 @@ type PostV1UploadFilesParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewPostV1UploadFilesParams() beforehand.
-func (o *PostV1UploadFilesParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewPostV1UploadFilesVCNameParams() beforehand.
+func (o *PostV1UploadFilesVCNameParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -52,6 +58,11 @@ func (o *PostV1UploadFilesParams) BindRequest(r *http.Request, route *middleware
 		} else if err := r.ParseForm(); err != nil {
 			return errors.New(400, "%v", err)
 		}
+	}
+
+	rVCName, rhkVCName, _ := route.Params.GetOK("VCName")
+	if err := o.bindVCName(rVCName, rhkVCName, route.Formats); err != nil {
+		res = append(res, err)
 	}
 
 	file, fileHeader, err := r.FormFile("file")
@@ -71,9 +82,24 @@ func (o *PostV1UploadFilesParams) BindRequest(r *http.Request, route *middleware
 	return nil
 }
 
+// bindVCName binds and validates parameter VCName from path.
+func (o *PostV1UploadFilesVCNameParams) bindVCName(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// Parameter is provided by construction from the route
+
+	o.VCName = raw
+
+	return nil
+}
+
 // bindFile binds file parameter File.
 //
 // The only supported validations on files are MinLength and MaxLength
-func (o *PostV1UploadFilesParams) bindFile(file multipart.File, header *multipart.FileHeader) error {
+func (o *PostV1UploadFilesVCNameParams) bindFile(file multipart.File, header *multipart.FileHeader) error {
 	return nil
 }

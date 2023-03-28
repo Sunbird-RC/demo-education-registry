@@ -112,9 +112,15 @@ func init() {
         }
       }
     },
-    "/v1/uploadFiles": {
+    "/v1/uploadFiles/{VCName}": {
       "post": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "multipart/form-data"
         ],
@@ -131,17 +137,30 @@ func init() {
             "description": "Certification data in the form of csv",
             "name": "file",
             "in": "formData"
+          },
+          {
+            "type": "string",
+            "description": "VerifiableCredential you are issuing",
+            "name": "VCName",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateRecordResponse"
+            }
           }
         }
       }
     }
   },
   "definitions": {
+    "CreateRecordResponse": {
+      "type": "object"
+    },
     "FileDownload": {
       "type": "object"
     },
@@ -150,6 +169,18 @@ func init() {
     },
     "UploadedFiles": {
       "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "hasRole": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://dummy.oauth.net/auth",
+      "tokenUrl": "https://dumy.oauth.net/token",
+      "scopes": {
+        "admin": "scope of super admin",
+        "facility-admin": "scope of facility admin"
+      }
     }
   },
   "security": [
@@ -253,9 +284,15 @@ func init() {
         }
       }
     },
-    "/v1/uploadFiles": {
+    "/v1/uploadFiles/{VCName}": {
       "post": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "multipart/form-data"
         ],
@@ -272,17 +309,30 @@ func init() {
             "description": "Certification data in the form of csv",
             "name": "file",
             "in": "formData"
+          },
+          {
+            "type": "string",
+            "description": "VerifiableCredential you are issuing",
+            "name": "VCName",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateRecordResponse"
+            }
           }
         }
       }
     }
   },
   "definitions": {
+    "CreateRecordResponse": {
+      "type": "object"
+    },
     "FileDownload": {
       "type": "object"
     },
@@ -291,6 +341,18 @@ func init() {
     },
     "UploadedFiles": {
       "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "hasRole": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://dummy.oauth.net/auth",
+      "tokenUrl": "https://dumy.oauth.net/token",
+      "scopes": {
+        "admin": "scope of super admin",
+        "facility-admin": "scope of facility admin"
+      }
     }
   },
   "security": [
