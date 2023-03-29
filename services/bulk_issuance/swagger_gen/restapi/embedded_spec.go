@@ -35,7 +35,7 @@ func init() {
       "get": {
         "security": [],
         "produces": [
-          "multipart/form-data"
+          "application/octet-stream"
         ],
         "tags": [
           "sampleTemplate"
@@ -55,6 +55,11 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SampleTemplateResponse"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
             }
           }
         }
@@ -87,7 +92,7 @@ func init() {
       "get": {
         "security": [],
         "produces": [
-          "multipart/form-data"
+          "application/octet-stream"
         ],
         "tags": [
           "downloadFileReport"
@@ -107,6 +112,11 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
             }
           }
         }
@@ -207,7 +217,7 @@ func init() {
       "get": {
         "security": [],
         "produces": [
-          "multipart/form-data"
+          "application/octet-stream"
         ],
         "tags": [
           "sampleTemplate"
@@ -227,6 +237,11 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SampleTemplateResponse"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
             }
           }
         }
@@ -259,7 +274,7 @@ func init() {
       "get": {
         "security": [],
         "produces": [
-          "multipart/form-data"
+          "application/octet-stream"
         ],
         "tags": [
           "downloadFileReport"
@@ -279,6 +294,11 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
             }
           }
         }

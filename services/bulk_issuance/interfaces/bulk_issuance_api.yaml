@@ -32,7 +32,7 @@ paths:
         - sampleTemplate
       summary: get sample template
       produces:
-        - multipart/form-data
+        - application/octet-stream
       security: []
       parameters:
         - name: schemaName
@@ -43,6 +43,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            Content-Disposition:
+              type: string
           schema:
             $ref: '#/definitions/SampleTemplateResponse'
   /v1/bulk/uploadedFiles:
@@ -92,7 +95,7 @@ paths:
         - downloadFileReport
       summary: download the success and error report of file uploaded
       produces:
-        - multipart/form-data
+        - application/octet-stream
       security: []
       parameters:
         - name: fileName
@@ -103,6 +106,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            Content-Disposition:
+              type: string
           schema:
             $ref: '#/definitions/FileDownload'
           

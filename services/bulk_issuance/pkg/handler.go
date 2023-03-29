@@ -56,16 +56,23 @@ func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) 
 	headers := [][]string{
 		{"Record Name", "Email", "Phone", "Date of Birth", "Validity"},
 	}
-	csvFile, err := os.Create(params.SchemaName + ".csv")
+	fileName := params.SchemaName
+	csvFile, err := os.Create(fileName)
+	defer csvFile.Close()
+
 	if err != nil {
 		log.Printf("Error creating csv file : %v", err)
 	}
 	csvwriter := csv.NewWriter(csvFile)
+	defer csvwriter.Flush()
 	for _, header_row := range headers {
 		log.Print(header_row)
 		csvwriter.Write(header_row)
 	}
 	csvwriter.Flush()
+	csvFile.Close()
+	f, _ := os.Open(fileName)
+	response.WithContentDisposition("attachment; filename=\"" + params.SchemaName + ".csv\"").WithPayload(f)
 	return &response
 }
 
@@ -80,6 +87,7 @@ func listFiles(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Re
 }
 
 func downloadReportFile(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
+	response := download_file_report.GetV1DownloadFileNameOK{}
 	file := db.GetDBFilesUpload(params.FileName)
 	var data [][]string
 	if err := json.Unmarshal(file.RowData, &data); err != nil {
@@ -91,14 +99,15 @@ func downloadReportFile(params download_file_report.GetV1DownloadFileNameParams)
 	defer w.Flush()
 	w.Write(strings.Split(file.Headers, ","))
 	for _, d := range data {
-		log.Printf("D : %v", d)
 		if err := w.Write(d); err != nil {
-			log.Fatalln(err)
+			log.Fatal(err)
 		}
 	}
 	w.Flush()
 	f.Close()
-	return download_file_report.NewGetV1DownloadFileNameOK()
+	f, _ = os.Open(params.FileName)
+	response.WithContentDisposition("attachment; filename=\"" + params.FileName + "\"").WithPayload(f)
+	return &response
 }
 
 type Scanner struct {

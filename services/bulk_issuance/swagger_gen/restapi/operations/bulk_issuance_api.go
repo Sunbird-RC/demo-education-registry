@@ -47,8 +47,8 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		JSONConsumer:          runtime.JSONConsumer(),
 		MultipartformConsumer: runtime.DiscardConsumer,
 
-		JSONProducer:          runtime.JSONProducer(),
-		MultipartformProducer: runtime.DiscardProducer,
+		BinProducer:  runtime.ByteStreamProducer(),
+		JSONProducer: runtime.JSONProducer(),
 
 		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
@@ -101,12 +101,12 @@ type BulkIssuanceAPI struct {
 	//   - multipart/form-data
 	MultipartformConsumer runtime.Consumer
 
+	// BinProducer registers a producer for the following mime types:
+	//   - application/octet-stream
+	BinProducer runtime.Producer
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
-	// MultipartformProducer registers a producer for the following mime types:
-	//   - multipart/form-data
-	MultipartformProducer runtime.Producer
 
 	// HasRoleAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
@@ -198,11 +198,11 @@ func (o *BulkIssuanceAPI) Validate() error {
 		unregistered = append(unregistered, "MultipartformConsumer")
 	}
 
+	if o.BinProducer == nil {
+		unregistered = append(unregistered, "BinProducer")
+	}
 	if o.JSONProducer == nil {
 		unregistered = append(unregistered, "JSONProducer")
-	}
-	if o.MultipartformProducer == nil {
-		unregistered = append(unregistered, "MultipartformProducer")
 	}
 
 	if o.HasRoleAuth == nil {
@@ -279,10 +279,10 @@ func (o *BulkIssuanceAPI) ProducersFor(mediaTypes []string) map[string]runtime.P
 	result := make(map[string]runtime.Producer, len(mediaTypes))
 	for _, mt := range mediaTypes {
 		switch mt {
+		case "application/octet-stream":
+			result["application/octet-stream"] = o.BinProducer
 		case "application/json":
 			result["application/json"] = o.JSONProducer
-		case "multipart/form-data":
-			result["multipart/form-data"] = o.MultipartformProducer
 		}
 
 		if p, ok := o.customProducers[mt]; ok {

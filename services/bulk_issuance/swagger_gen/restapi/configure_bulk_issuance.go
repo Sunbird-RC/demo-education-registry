@@ -38,13 +38,13 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 	api.UseSwaggerUI()
 	// To continue using redoc as your UI, uncomment the following line
 	// api.UseRedoc()
-	pkg.SetupHandlers(api)
+
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.MultipartformConsumer = runtime.DiscardConsumer
-
+	pkg.SetupHandlers(api)
+	api.BinProducer = runtime.ByteStreamProducer()
 	api.JSONProducer = runtime.JSONProducer()
-	api.MultipartformProducer = runtime.DiscardProducer
-	api.HasRoleAuth = pkg.RoleAuthorizer
+
 	if api.HasRoleAuth == nil {
 		api.HasRoleAuth = func(token string, scopes []string) (*models.JWTClaimBody, error) {
 			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")

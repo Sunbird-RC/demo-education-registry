@@ -21,6 +21,10 @@ const GetV1BulkSampleSchemaNameOKCode int = 200
 swagger:response getV1BulkSampleSchemaNameOK
 */
 type GetV1BulkSampleSchemaNameOK struct {
+	/*
+
+	 */
+	ContentDisposition string `json:"Content-Disposition"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type GetV1BulkSampleSchemaNameOK struct {
 func NewGetV1BulkSampleSchemaNameOK() *GetV1BulkSampleSchemaNameOK {
 
 	return &GetV1BulkSampleSchemaNameOK{}
+}
+
+// WithContentDisposition adds the contentDisposition to the get v1 bulk sample schema name o k response
+func (o *GetV1BulkSampleSchemaNameOK) WithContentDisposition(contentDisposition string) *GetV1BulkSampleSchemaNameOK {
+	o.ContentDisposition = contentDisposition
+	return o
+}
+
+// SetContentDisposition sets the contentDisposition to the get v1 bulk sample schema name o k response
+func (o *GetV1BulkSampleSchemaNameOK) SetContentDisposition(contentDisposition string) {
+	o.ContentDisposition = contentDisposition
 }
 
 // WithPayload adds the payload to the get v1 bulk sample schema name o k response
@@ -47,6 +62,13 @@ func (o *GetV1BulkSampleSchemaNameOK) SetPayload(payload models.SampleTemplateRe
 
 // WriteResponse to the client
 func (o *GetV1BulkSampleSchemaNameOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header Content-Disposition
+
+	contentDisposition := o.ContentDisposition
+	if contentDisposition != "" {
+		rw.Header().Set("Content-Disposition", contentDisposition)
+	}
 
 	rw.WriteHeader(200)
 	payload := o.Payload

@@ -21,6 +21,10 @@ const GetV1DownloadFileNameOKCode int = 200
 swagger:response getV1DownloadFileNameOK
 */
 type GetV1DownloadFileNameOK struct {
+	/*
+
+	 */
+	ContentDisposition string `json:"Content-Disposition"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type GetV1DownloadFileNameOK struct {
 func NewGetV1DownloadFileNameOK() *GetV1DownloadFileNameOK {
 
 	return &GetV1DownloadFileNameOK{}
+}
+
+// WithContentDisposition adds the contentDisposition to the get v1 download file name o k response
+func (o *GetV1DownloadFileNameOK) WithContentDisposition(contentDisposition string) *GetV1DownloadFileNameOK {
+	o.ContentDisposition = contentDisposition
+	return o
+}
+
+// SetContentDisposition sets the contentDisposition to the get v1 download file name o k response
+func (o *GetV1DownloadFileNameOK) SetContentDisposition(contentDisposition string) {
+	o.ContentDisposition = contentDisposition
 }
 
 // WithPayload adds the payload to the get v1 download file name o k response
@@ -47,6 +62,13 @@ func (o *GetV1DownloadFileNameOK) SetPayload(payload models.FileDownload) {
 
 // WriteResponse to the client
 func (o *GetV1DownloadFileNameOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header Content-Disposition
+
+	contentDisposition := o.ContentDisposition
+	if contentDisposition != "" {
+		rw.Header().Set("Content-Disposition", contentDisposition)
+	}
 
 	rw.WriteHeader(200)
 	payload := o.Payload
