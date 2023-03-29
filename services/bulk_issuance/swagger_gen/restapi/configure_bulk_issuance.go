@@ -42,6 +42,7 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.MultipartformConsumer = runtime.DiscardConsumer
 	pkg.SetupHandlers(api)
+	api.HasRoleAuth = pkg.RoleAuthorizer
 	api.BinProducer = runtime.ByteStreamProducer()
 	api.JSONProducer = runtime.JSONProducer()
 
@@ -66,9 +67,9 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		})
 	}
-	if api.DownloadFileReportGetV1DownloadFileNameHandler == nil {
-		api.DownloadFileReportGetV1DownloadFileNameHandler = download_file_report.GetV1DownloadFileNameHandlerFunc(func(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
-			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
+	if api.DownloadFileReportGetV1DownloadIDHandler == nil {
+		api.DownloadFileReportGetV1DownloadIDHandler = download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation download_file_report.GetV1DownloadIDHandlerFunc has not yet been implemented")
 		})
 	}
 	if api.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {

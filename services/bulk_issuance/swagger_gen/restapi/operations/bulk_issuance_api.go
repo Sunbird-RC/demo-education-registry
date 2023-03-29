@@ -56,8 +56,8 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Responder {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		}),
-		DownloadFileReportGetV1DownloadFileNameHandler: download_file_report.GetV1DownloadFileNameHandlerFunc(func(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
-			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
+		DownloadFileReportGetV1DownloadIDHandler: download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation download_file_report.GetV1DownloadID has not yet been implemented")
 		}),
 		UploadAndCreateRecordsPostV1UploadFilesVCNameHandler: upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFilesVCName has not yet been implemented")
@@ -119,8 +119,8 @@ type BulkIssuanceAPI struct {
 	SampleTemplateGetV1BulkSampleSchemaNameHandler sample_template.GetV1BulkSampleSchemaNameHandler
 	// UploadedFilesGetV1BulkUploadedFilesHandler sets the operation handler for the get v1 bulk uploaded files operation
 	UploadedFilesGetV1BulkUploadedFilesHandler uploaded_files.GetV1BulkUploadedFilesHandler
-	// DownloadFileReportGetV1DownloadFileNameHandler sets the operation handler for the get v1 download file name operation
-	DownloadFileReportGetV1DownloadFileNameHandler download_file_report.GetV1DownloadFileNameHandler
+	// DownloadFileReportGetV1DownloadIDHandler sets the operation handler for the get v1 download ID operation
+	DownloadFileReportGetV1DownloadIDHandler download_file_report.GetV1DownloadIDHandler
 	// UploadAndCreateRecordsPostV1UploadFilesVCNameHandler sets the operation handler for the post v1 upload files v c name operation
 	UploadAndCreateRecordsPostV1UploadFilesVCNameHandler upload_and_create_records.PostV1UploadFilesVCNameHandler
 	// ServeError is called when an error is received, there is a default handler
@@ -215,8 +215,8 @@ func (o *BulkIssuanceAPI) Validate() error {
 	if o.UploadedFilesGetV1BulkUploadedFilesHandler == nil {
 		unregistered = append(unregistered, "uploaded_files.GetV1BulkUploadedFilesHandler")
 	}
-	if o.DownloadFileReportGetV1DownloadFileNameHandler == nil {
-		unregistered = append(unregistered, "download_file_report.GetV1DownloadFileNameHandler")
+	if o.DownloadFileReportGetV1DownloadIDHandler == nil {
+		unregistered = append(unregistered, "download_file_report.GetV1DownloadIDHandler")
 	}
 	if o.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {
 		unregistered = append(unregistered, "upload_and_create_records.PostV1UploadFilesVCNameHandler")
@@ -334,7 +334,7 @@ func (o *BulkIssuanceAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/download/{fileName}"] = download_file_report.NewGetV1DownloadFileName(o.context, o.DownloadFileReportGetV1DownloadFileNameHandler)
+	o.handlers["GET"]["/v1/download/{id}"] = download_file_report.NewGetV1DownloadID(o.context, o.DownloadFileReportGetV1DownloadIDHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

@@ -89,7 +89,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/CreateRecordResponse'
-  /v1/download/{fileName}:
+  /v1/download/{id}:
     get:
       tags:
         - downloadFileReport
@@ -98,10 +98,10 @@ paths:
         - application/octet-stream
       security: []
       parameters:
-        - name: fileName
+        - name: id
           in: path
           required: true
-          type: string
+          type: integer
           description: File name
       responses:
         '200':

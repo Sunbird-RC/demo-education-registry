@@ -88,7 +88,7 @@ func init() {
         }
       }
     },
-    "/v1/download/{fileName}": {
+    "/v1/download/{id}": {
       "get": {
         "security": [],
         "produces": [
@@ -100,9 +100,9 @@ func init() {
         "summary": "download the success and error report of file uploaded",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "File name",
-            "name": "fileName",
+            "name": "id",
             "in": "path",
             "required": true
           }
@@ -270,7 +270,7 @@ func init() {
         }
       }
     },
-    "/v1/download/{fileName}": {
+    "/v1/download/{id}": {
       "get": {
         "security": [],
         "produces": [
@@ -282,9 +282,9 @@ func init() {
         "summary": "download the success and error report of file uploaded",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "File name",
-            "name": "fileName",
+            "name": "id",
             "in": "path",
             "required": true
           }

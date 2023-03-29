@@ -50,9 +50,9 @@ func CreateDBFileUpload(data *DBFileUpload) error {
 	return nil
 }
 
-func GetDBFilesUpload(fileName string) *DBFilesUpload {
+func GetDBFilesUpload(id int) *DBFilesUpload {
 	filesUpload := &DBFilesUpload{}
-	if result := db.First(&filesUpload, "filename=?", fileName); result.Error != nil {
+	if result := db.First(&filesUpload, "id=?", id); result.Error != nil {
 		log.Fatal("Error : %v", result.Error)
 	}
 	return filesUpload
