@@ -27,6 +27,13 @@ var Config = struct {
 		Url       string `env:"KEYCLOAK_URL" yaml:"url" default:"http://keycloak:8080/auth"`
 		Realm     string `env:"KEYCLOAK_REALM" yaml:"realm" default:"sunbird-rc"`
 	}
+	Database struct {
+		Host     string `env:"DATABASE_HOST" yaml:"host" default:"localhost"`
+		Port     string `env:"DATABASE_PORT" yaml:"port" default:"5432"`
+		User     string `env:"DATABASE_USER" yaml:"user" default:"postgres"`
+		Password string `env:"DATABASE_PASSWORD" yaml:"password" default:"postgres"`
+		DBName   string `env:"DATABASE_NAME" yaml:"dbName" default:"registry"`
+	}
 }{}
 
 func updatePublicKeyFromKeycloak() error {

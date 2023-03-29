@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"bulk_issuance/config"
+	"bulk_issuance/db"
 	"bulk_issuance/swagger_gen/models"
 	"bulk_issuance/swagger_gen/restapi/operations"
 	"bulk_issuance/swagger_gen/restapi/operations/download_file_report"
@@ -50,38 +51,11 @@ func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) 
 
 func listFiles(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Responder {
 	response := uploaded_files.GetV1BulkUploadedFilesOK{}
-	uploadedFiles := make([]map[string]interface{}, 0)
-	uploadedFiles = append(uploadedFiles, map[string]interface{}{
-		"name":              "file1",
-		"uploadedBy":        "temp_user1",
-		"number_of_records": "152",
-		"date":              time.Now().Format("2006-01-02"),
-	})
-	uploadedFiles = append(uploadedFiles, map[string]interface{}{
-		"name":              "file2",
-		"uploadedBy":        "temp_user2",
-		"number_of_records": "152",
-		"date":              time.Now().Format("2006-01-02"),
-	})
-	uploadedFiles = append(uploadedFiles, map[string]interface{}{
-		"name":              "file3",
-		"uploadedBy":        "temp_user3",
-		"number_of_records": "152",
-		"date":              time.Now().Format("2006-01-02"),
-	})
-	uploadedFiles = append(uploadedFiles, map[string]interface{}{
-		"name":              "file4",
-		"uploadedBy":        "temp_user4",
-		"number_of_records": "152",
-		"date":              time.Now().Format("2006-01-02"),
-	})
-	uploadedFiles = append(uploadedFiles, map[string]interface{}{
-		"name":              "file5",
-		"uploadedBy":        "temp_user5",
-		"number_of_records": "152",
-		"date":              time.Now().Format("2006-01-02"),
-	})
-	response.SetPayload(uploadedFiles)
+	files, err := db.GetAllUploadedFilesData()
+	if err != nil {
+		return &response
+	}
+	response.SetPayload(files)
 	return &response
 }
 
@@ -117,7 +91,6 @@ func (o *Scanner) Scan() bool {
 func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 	data := NewScanner(params.File)
 	totalSuccess, totalErrors := Process(&data, params.HTTPRequest.Header, params.VCName)
-	log.Printf("Principal : %v", principal.PreferredUsername)
 	successFailureCount := map[string]int{
 		"success":   totalSuccess,
 		"error":     totalErrors,
@@ -125,6 +98,15 @@ func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParam
 	}
 	response := upload_and_create_records.NewPostV1UploadFilesVCNameOK()
 	response.SetPayload(successFailureCount)
+	_, fileHeader, _ := params.HTTPRequest.FormFile("file")
+	fileName := fileHeader.Filename
+	dbUpload := db.DBFileUpload{
+		Filename:     fileName,
+		TotalRecords: totalSuccess + totalErrors,
+		UserID:       principal.PreferredUsername,
+		Date:         time.Now().Format("2006-01-02"),
+	}
+	db.CreateDBFileUpload(&dbUpload)
 	return response
 }
 
