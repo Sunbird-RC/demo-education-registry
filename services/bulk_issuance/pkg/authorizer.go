@@ -26,9 +26,7 @@ func Init() {
 	log.Infof("Using the public key %s", string(verifyBytes))
 	var err error
 	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
-	if err != nil {
-		log.Print(err)
-	}
+	utils.LogErrorIfAny("Error parsing public key from keycloak : %v", err)
 }
 
 func HasResourceRole(clientId string, role string, principal *models.JWTClaimBody) bool {

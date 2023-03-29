@@ -1,22 +1,21 @@
 package file_service
 
 import (
+	"bulk_issuance/utils"
 	"encoding/csv"
-	"log"
 	"os"
 )
 
 func CreateFile(fileName string, values [][]string) {
 	csvFile, err := os.Create(fileName)
 	defer csvFile.Close()
-	if err != nil {
-		log.Printf("Error creating csv file : %v", err)
-	}
+	utils.LogErrorIfAny("Error creating csv file with name %v : %v", err, fileName)
 	csvwriter := csv.NewWriter(csvFile)
 	defer csvwriter.Flush()
 	for _, value := range values {
 		csvwriter.Write(value)
 	}
 	csvwriter.Flush()
-	csvFile.Close()
+	err = csvFile.Close()
+	utils.LogErrorIfAny("Error while closing the file with name %v : %v", err, fileName)
 }

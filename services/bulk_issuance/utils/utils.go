@@ -4,8 +4,10 @@ import (
 	"bulk_issuance/config"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"sort"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func Contains(arr []string, str string) bool {
@@ -17,15 +19,24 @@ func Contains(arr []string, str string) bool {
 	return false
 }
 
-func GetSchemaProperties(key string) map[string]interface{} {
+func GetSchemaProperties(key string) []string {
 	resp, err := http.Get(config.Config.Registry.BaseUrl + "api/docs/swagger.json")
-	if err != nil {
-		log.Fatal(err)
-	}
+	LogErrorIfAny("Error creating a get request for %v : %v", err, config.Config.Registry.BaseUrl+"api/docs/swagger.json")
 	body, _ := ioutil.ReadAll(resp.Body)
 	var responseMap map[string]interface{}
-	if err = json.Unmarshal(body, &responseMap); err != nil {
-		log.Fatal("IN JSON ", err)
+	err = json.Unmarshal(body, &responseMap)
+	LogErrorIfAny("Error creating request body for %v : %v", err, config.Config.Registry.BaseUrl+"api/docs/swagger.json")
+	schemaProperties := responseMap["definitions"].(map[string]interface{})[key].(map[string]interface{})["properties"].(map[string]interface{})
+	properties := make([]string, 0)
+	for k := range schemaProperties {
+		properties = append(properties, k)
 	}
-	return responseMap["definitions"].(map[string]interface{})[key].(map[string]interface{})["properties"].(map[string]interface{})
+	sort.Strings(properties)
+	return properties
+}
+
+func LogErrorIfAny(description string, err error, data ...interface{}) {
+	if err != nil {
+		log.Errorf(description, data, err)
+	}
 }

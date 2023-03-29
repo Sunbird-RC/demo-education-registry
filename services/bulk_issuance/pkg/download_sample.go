@@ -7,24 +7,19 @@ import (
 	"os"
 
 	"github.com/go-openapi/runtime/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
+	log.Info("Downloading sample file")
 	response := sample_template.GetV1BulkSampleSchemaNameOK{}
-	schemaHeader := getFieldHeaders(params.SchemaName)
+	schemaProperties := utils.GetSchemaProperties(params.SchemaName)
 	headers := make([][]string, 0)
-	headers = append(headers, schemaHeader)
+	headers = append(headers, schemaProperties)
+	log.Infof("Headers for schema %v : %v", params.SchemaName, headers)
 	file_service.CreateFile(params.SchemaName+".csv", headers)
-	f, _ := os.Open(params.SchemaName + ".csv")
+	f, err := os.Open(params.SchemaName + ".csv")
+	utils.LogErrorIfAny("Error while opening file : %v", err)
 	response.WithContentDisposition("attachment; filename=\"" + params.SchemaName + ".csv\"").WithPayload(f)
 	return &response
-}
-
-func getFieldHeaders(schemaName string) []string {
-	properties := utils.GetSchemaProperties(schemaName)
-	headers := make([]string, 0)
-	for k := range properties {
-		headers = append(headers, k)
-	}
-	return headers
 }

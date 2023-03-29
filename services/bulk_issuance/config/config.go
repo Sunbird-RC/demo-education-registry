@@ -2,10 +2,10 @@ package config
 
 import (
 	"errors"
-	"log"
 
 	"github.com/imroc/req"
 	"github.com/jinzhu/configor"
+	log "github.com/sirupsen/logrus"
 )
 
 func Initialize(fileName string) {
@@ -38,12 +38,12 @@ var Config = struct {
 
 func updatePublicKeyFromKeycloak() error {
 	url := Config.Keycloak.Url + "/realms/" + Config.Keycloak.Realm
-	log.Printf("Public key url : %v", url)
+	log.Infof("Public key url : %v", url)
 	resp, err := req.Get(url)
 	if err != nil {
 		return err
 	}
-	log.Printf("Got response %+v", resp.String())
+	log.Infof("Got response %+v", resp.String())
 	responseObject := map[string]interface{}{}
 	if err := resp.ToJSON(&responseObject); err == nil {
 		if publicKey, ok := responseObject["public_key"].(string); ok {

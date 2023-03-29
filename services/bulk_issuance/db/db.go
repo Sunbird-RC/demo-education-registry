@@ -2,8 +2,10 @@ package db
 
 import (
 	"bulk_issuance/config"
+	"bulk_issuance/utils"
 	"fmt"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -11,7 +13,7 @@ import (
 
 var db *gorm.DB
 
-type DBFileUpload struct {
+type DBFiles struct {
 	gorm.Model
 	Filename     string
 	TotalRecords int
@@ -19,7 +21,7 @@ type DBFileUpload struct {
 	Date         string
 }
 
-type DBFilesUpload struct {
+type DBFileData struct {
 	gorm.Model
 	Filename string
 	Headers  string
@@ -32,44 +34,42 @@ func Init() {
 		config.Config.Database.Host, config.Config.Database.Port,
 		config.Config.Database.User, config.Config.Database.Password, config.Config.Database.DBName,
 	)
-	log.Printf("Using db %s", dbPath)
+	log.Infof("Using db %s", dbPath)
 	db, e = gorm.Open("postgres", dbPath)
 	if e != nil {
-		log.Printf("Error %+v", e)
 		panic("failed to connect to database")
 	}
-	db.AutoMigrate(&DBFileUpload{})
-	db.AutoMigrate(&DBFilesUpload{})
+	db.AutoMigrate(&DBFiles{})
+	db.AutoMigrate(&DBFileData{})
 }
 
-func CreateDBFileUpload(data *DBFileUpload) error {
-	if result := db.Create(&data); result.Error != nil {
-		log.Printf("%v", data.Filename)
-	}
-	log.Printf("%v", data.Filename)
+func CreateDBFiles(data *DBFiles) error {
+	log.Info("Creating DBFiles entry")
+	result := db.Create(&data)
+	utils.LogErrorIfAny("Error while adding DBFiles : %v", result.Error)
 	return nil
 }
 
-func GetDBFilesUpload(id int) *DBFilesUpload {
-	filesUpload := &DBFilesUpload{}
-	if result := db.First(&filesUpload, "id=?", id); result.Error != nil {
-		log.Fatal("Error : %v", result.Error)
-	}
+func GetDBFileData(id int) *DBFileData {
+	filesUpload := &DBFileData{}
+	log.Infof("Getting file data with id : %v", id)
+	result := db.First(&filesUpload, "id=?", id)
+	utils.LogErrorIfAny("Error while getting DBFileData : %v", result.Error)
 	return filesUpload
 }
 
-func CreateDBFilesUpload(data *DBFilesUpload) error {
-	if result := db.Create(&data); result.Error != nil {
-		log.Printf("%v", data.Filename)
-	}
-	log.Printf("%v", data.Filename)
+func CreateDBFileData(data *DBFileData) error {
+	log.Info("Creating DBFileData entry")
+	result := db.Create(&data)
+	utils.LogErrorIfAny("Error while adding DBFileData : %v", result.Error)
 	return nil
 }
 
-func GetAllUploadedFilesData() ([]DBFileUpload, error) {
-	var files []DBFileUpload
+func GetAllUploadedFilesData() ([]DBFiles, error) {
+	var files []DBFiles
+	log.Info("Getting all uploaded files")
 	if err := db.Find(&files).Error; err != nil {
-		log.Fatal(err)
+		utils.LogErrorIfAny("Error while requesting for all uploaded files : %v", err)
 		return nil, err
 	}
 	return files, nil

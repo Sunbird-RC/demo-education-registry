@@ -4,24 +4,27 @@ import (
 	"bulk_issuance/db"
 	file_service "bulk_issuance/pkg/file"
 	"bulk_issuance/swagger_gen/restapi/operations/download_file_report"
+	"bulk_issuance/utils"
 	"encoding/json"
-	"log"
 	"os"
 	"strings"
 
 	"github.com/go-openapi/runtime/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 func downloadReportFile(params download_file_report.GetV1DownloadIDParams) middleware.Responder {
+	log.Infof("Downloading report file with ID : %v", params.ID)
 	response := download_file_report.GetV1DownloadFileNameOK{}
-	file := db.GetDBFilesUpload(int(params.ID))
+	file := db.GetDBFileData(int(params.ID))
 	var data [][]string
-	if err := json.Unmarshal(file.RowData, &data); err != nil {
-		log.Fatal("Error : %v", err)
-	}
+	err := json.Unmarshal(file.RowData, &data)
+	utils.LogErrorIfAny("Error while unmarshalling row data for downloading report of file : %v ", err)
 	data = append([][]string{strings.Split(file.Headers, ",")}, data...)
 	file_service.CreateFile(file.Filename, data)
-	f, _ := os.Open(file.Filename)
+	f, err := os.Open(file.Filename)
+	utils.LogErrorIfAny("Error while opening a file with name %v : %v ", err, file.Filename)
 	response.WithContentDisposition("attachment; filename=\"" + file.Filename + "\"").WithPayload(f)
+	log.Infof("Downloading file with name : %v", file.Filename)
 	return &response
 }

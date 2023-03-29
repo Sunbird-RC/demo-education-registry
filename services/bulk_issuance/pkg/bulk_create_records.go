@@ -10,13 +10,13 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 type Scanner struct {
@@ -45,6 +45,7 @@ func (o *Scanner) Scan() bool {
 }
 
 func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
+	log.Info("Creating records")
 	data := NewScanner(params.File)
 	totalSuccess, totalErrors, rows := processDataFromCSV(&data, params.HTTPRequest.Header, params.VCName)
 	successFailureCount := map[string]int{
@@ -54,39 +55,37 @@ func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParam
 	}
 	response := upload_and_create_records.NewPostV1UploadFilesVCNameOK()
 	response.SetPayload(successFailureCount)
-	_, fileHeader, _ := params.HTTPRequest.FormFile("file")
+	_, fileHeader, err := params.HTTPRequest.FormFile("file")
+	utils.LogErrorIfAny("Error retrieving file from request : %v", err)
 	fileName := fileHeader.Filename
-	err := addEntryForDbUploadToDatabase(fileName, totalSuccess, totalErrors, principal)
-	logErrorIfAny("DBUpload", err)
-	addEntryForDbFilesToDatabase(rows, fileName, data)
-	logErrorIfAny("DBFilesUpload", err)
+	err = addEntryForDbUploadToDatabase(fileName, totalSuccess, totalErrors, principal)
+	utils.LogErrorIfAny("Error while adding entry to table DBFiles : %v", err)
+	err = addEntryForDbFilesToDatabase(rows, fileName, data)
+	utils.LogErrorIfAny("Error while adding entry to table DBFileData : %v", err)
 	return response
 }
 
-func logErrorIfAny(entity string, err error) {
-	if err != nil {
-		log.Printf("Error in adding %v to database : %v", entity, err)
-	}
-}
-
 func addEntryForDbFilesToDatabase(rows [][]string, fileName string, data Scanner) error {
-	bytes, _ := json.Marshal(rows)
-	fileUpload := db.DBFilesUpload{
+	log.Info("adding entry to dbFileData")
+	bytes, err := json.Marshal(rows)
+	utils.LogErrorIfAny("Error while marshalling data for database : %v", err)
+	fileUpload := db.DBFileData{
 		Filename: fileName,
 		Headers:  getHeaders(data.Head),
 		RowData:  bytes,
 	}
-	return db.CreateDBFilesUpload(&fileUpload)
+	return db.CreateDBFileData(&fileUpload)
 }
 
 func addEntryForDbUploadToDatabase(fileName string, totalSuccess int, totalErrors int, principal *models.JWTClaimBody) error {
-	dbUpload := db.DBFileUpload{
+	log.Info("adding entry to dbFiles")
+	dbUpload := db.DBFiles{
 		Filename:     fileName,
 		TotalRecords: totalSuccess + totalErrors,
 		UserID:       principal.PreferredUsername,
 		Date:         time.Now().Format("2006-01-02"),
 	}
-	return db.CreateDBFileUpload(&dbUpload)
+	return db.CreateDBFiles(&dbUpload)
 }
 
 func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, int, [][]string) {
@@ -95,14 +94,13 @@ func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, 
 		totalErrors  int = 0
 	)
 	rows := make([][]string, 0)
+	log.Info("processing all rows from csv")
 	for data.Scan() {
 		jsonBody := make(map[string]interface{})
 		properties := utils.GetSchemaProperties(vcName)
 		bytes := createReqBody(properties, jsonBody, data)
 		res, err := createSingleRecord(vcName, bytes, header)
-		if err != nil {
-			log.Printf("Error in creating a record : %v", err)
-		}
+		utils.LogErrorIfAny("Error in creating a record : %v", err)
 		currRow := make([]string, 0)
 		currRow = data.Row
 		if res.StatusCode != 200 {
@@ -114,11 +112,13 @@ func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, 
 		}
 		rows = append(rows, currRow)
 	}
+	log.Info("processed all rows from csv")
 	return totalSuccess, totalErrors, rows
 }
 
 func appendErrorsToCurrentRow(res *http.Response, data *Scanner, lastColIndex int, currRow []string) []string {
-	resBody, _ := ioutil.ReadAll(res.Body)
+	resBody, err := ioutil.ReadAll(res.Body)
+	utils.LogErrorIfAny("Error while reading error reponse from adding single record : %v", err)
 	data.Head["Errors"] = lastColIndex
 	currRow = append(currRow, string(resBody))
 	return currRow
@@ -127,20 +127,19 @@ func appendErrorsToCurrentRow(res *http.Response, data *Scanner, lastColIndex in
 func createSingleRecord(vcName string, bytes []byte, header http.Header) (*http.Response, error) {
 	methodName := "POST"
 	req, err := http.NewRequest(methodName, config.Config.Registry.BaseUrl+"api/v1/"+vcName, strings.NewReader(string(bytes)))
-	if err != nil {
-		log.Printf("Error in creating request : %v", err)
-	}
+	utils.LogErrorIfAny("Error in creating request %v : %v", err, config.Config.Registry.BaseUrl+"api/v1/"+vcName)
 	req.Header.Set("Authorization", header["Authorization"][0])
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	return client.Do(req)
 }
 
-func createReqBody(properties map[string]interface{}, jsonBody map[string]interface{}, data *Scanner) []byte {
-	for k, _ := range properties {
+func createReqBody(properties []string, jsonBody map[string]interface{}, data *Scanner) []byte {
+	for _, k := range properties {
 		jsonBody[k] = data.Row[data.Head[k]]
 	}
-	bytes, _ := json.Marshal(jsonBody)
+	bytes, err := json.Marshal(jsonBody)
+	utils.LogErrorIfAny("Error while marshalling data for creating req body : %v", err)
 	return bytes
 }
 

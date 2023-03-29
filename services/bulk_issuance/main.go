@@ -6,8 +6,9 @@ import (
 	"bulk_issuance/pkg"
 	"bulk_issuance/swagger_gen/restapi"
 	"bulk_issuance/swagger_gen/restapi/operations"
-	"log"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/go-openapi/loads"
 	"github.com/jessevdk/go-flags"
