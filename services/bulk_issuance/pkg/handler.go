@@ -15,11 +15,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 	"time"
 
 	"log"
 
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 )
 
@@ -28,6 +30,25 @@ func SetupHandlers(api *operations.BulkIssuanceAPI) {
 	api.UploadedFilesGetV1BulkUploadedFilesHandler = uploaded_files.GetV1BulkUploadedFilesHandlerFunc(listFiles)
 	api.DownloadFileReportGetV1DownloadFileNameHandler = download_file_report.GetV1DownloadFileNameHandlerFunc(downloadReportFile)
 	api.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler = upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(createRecords)
+}
+
+func NewGenericJSONResponse(body interface{}) middleware.Responder {
+	return &GenericJsonResponse{body: body}
+}
+
+type GenericJsonResponse struct {
+	body interface{}
+}
+
+func (o *GenericJsonResponse) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	bytes, err := json.Marshal(o.body)
+	if err != nil {
+		rw.WriteHeader(500)
+		rw.Write([]byte("JSON Marshalling error"))
+	}
+	rw.WriteHeader(200)
+	rw.Write(bytes)
 }
 
 func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
@@ -45,7 +66,6 @@ func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) 
 		csvwriter.Write(header_row)
 	}
 	csvwriter.Flush()
-	response.SetPayload(csvFile)
 	return &response
 }
 
@@ -60,6 +80,24 @@ func listFiles(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Re
 }
 
 func downloadReportFile(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
+	file := db.GetDBFilesUpload(params.FileName)
+	var data [][]string
+	if err := json.Unmarshal(file.RowData, &data); err != nil {
+		log.Fatal("Error : %v", err)
+	}
+	f, _ := os.Create(params.FileName)
+	defer f.Close()
+	w := csv.NewWriter(f)
+	defer w.Flush()
+	w.Write(strings.Split(file.Headers, ","))
+	for _, d := range data {
+		log.Printf("D : %v", d)
+		if err := w.Write(d); err != nil {
+			log.Fatalln(err)
+		}
+	}
+	w.Flush()
+	f.Close()
 	return download_file_report.NewGetV1DownloadFileNameOK()
 }
 
@@ -90,7 +128,7 @@ func (o *Scanner) Scan() bool {
 
 func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 	data := NewScanner(params.File)
-	totalSuccess, totalErrors := Process(&data, params.HTTPRequest.Header, params.VCName)
+	totalSuccess, totalErrors, rows := Process(&data, params.HTTPRequest.Header, params.VCName)
 	successFailureCount := map[string]int{
 		"success":   totalSuccess,
 		"error":     totalErrors,
@@ -106,16 +144,37 @@ func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParam
 		UserID:       principal.PreferredUsername,
 		Date:         time.Now().Format("2006-01-02"),
 	}
+	bytes, _ := json.Marshal(rows)
+	fileUpload := db.DBFilesUpload{
+		Filename: fileName,
+		Headers:  getHeaders(data.Head),
+		RowData:  bytes,
+	}
 	db.CreateDBFileUpload(&dbUpload)
+	db.CreateDBFilesUpload(&fileUpload)
 	return response
 }
 
-func Process(data *Scanner, header http.Header, vcName string) (int, int) {
+func getHeaders(head map[string]int) string {
+	headers := make([]string, 0)
+	for k := range head {
+		headers = append(headers, k)
+	}
+	sort.SliceStable(headers, func(i, j int) bool {
+		return head[headers[i]] < head[headers[j]]
+	})
+	return strings.Join(headers, ",")
+}
+
+func Process(data *Scanner, header http.Header, vcName string) (int, int, [][]string) {
 	var (
-		totalSuccess int = 0
-		totalErrors  int = 0
+		totalSuccess    int = 0
+		totalErrors     int = 0
+		lastColumnIndex int = 0
 	)
+	rows := make([][]string, 0)
 	for data.Scan() {
+		currRow := make([]string, 0)
 		jsonBody := make(map[string]interface{})
 		resp, err := http.Get(config.Config.Registry.BaseUrl + "api/docs/swagger.json")
 		if err != nil {
@@ -128,6 +187,9 @@ func Process(data *Scanner, header http.Header, vcName string) (int, int) {
 		}
 		properties := responseMap["definitions"].(map[string]interface{})[vcName].(map[string]interface{})["properties"].(map[string]interface{})
 		for k, _ := range properties {
+			if lastColumnIndex < data.Head[k] {
+				lastColumnIndex = data.Head[k]
+			}
 			jsonBody[k] = data.Row[data.Head[k]]
 		}
 		bytes, _ := json.Marshal(jsonBody)
@@ -139,12 +201,17 @@ func Process(data *Scanner, header http.Header, vcName string) (int, int) {
 		if err != nil {
 			log.Fatal("Error : %v", err)
 		}
+		currRow = data.Row
 		if res.StatusCode == 200 {
 			totalSuccess += 1
 		} else {
 			totalErrors += 1
+			resBody, _ := ioutil.ReadAll(res.Body)
+			data.Head["Errors"] = lastColumnIndex + 1
+			currRow = append(currRow, string(resBody))
 		}
-		log.Printf("Response Status : %v", res)
+		rows = append(rows, currRow)
 	}
-	return totalSuccess, totalErrors
+	log.Printf("Rows : %v", rows)
+	return totalSuccess, totalErrors, rows
 }

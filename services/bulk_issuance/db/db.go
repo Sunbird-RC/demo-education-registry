@@ -19,6 +19,13 @@ type DBFileUpload struct {
 	Date         string
 }
 
+type DBFilesUpload struct {
+	gorm.Model
+	Filename string
+	Headers  string
+	RowData  []byte
+}
+
 func Init() {
 	var e error
 	dbPath := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -32,9 +39,26 @@ func Init() {
 		panic("failed to connect to database")
 	}
 	db.AutoMigrate(&DBFileUpload{})
+	db.AutoMigrate(&DBFilesUpload{})
 }
 
 func CreateDBFileUpload(data *DBFileUpload) error {
+	if result := db.Create(&data); result.Error != nil {
+		log.Printf("%v", data.Filename)
+	}
+	log.Printf("%v", data.Filename)
+	return nil
+}
+
+func GetDBFilesUpload(fileName string) *DBFilesUpload {
+	filesUpload := &DBFilesUpload{}
+	if result := db.First(&filesUpload, "filename=?", fileName); result.Error != nil {
+		log.Fatal("Error : %v", result.Error)
+	}
+	return filesUpload
+}
+
+func CreateDBFilesUpload(data *DBFilesUpload) error {
 	if result := db.Create(&data); result.Error != nil {
 		log.Printf("%v", data.Filename)
 	}
