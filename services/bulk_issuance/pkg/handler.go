@@ -53,8 +53,19 @@ func (o *GenericJsonResponse) WriteResponse(rw http.ResponseWriter, producer run
 
 func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
 	response := sample_template.GetV1BulkSampleSchemaNameOK{}
-	headers := [][]string{
-		{"Record Name", "Email", "Phone", "Date of Birth", "Validity"},
+	resp, err := http.Get(config.Config.Registry.BaseUrl + "api/docs/swagger.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	var responseMap map[string]interface{}
+	if err = json.Unmarshal(body, &responseMap); err != nil {
+		log.Fatal("IN JSON ", err)
+	}
+	properties := responseMap["definitions"].(map[string]interface{})[params.SchemaName].(map[string]interface{})["properties"].(map[string]interface{})
+	headers := make([]string, 0)
+	for k, _ := range properties {
+		headers = append(headers, k)
 	}
 	fileName := params.SchemaName
 	csvFile, err := os.Create(fileName)
@@ -65,10 +76,7 @@ func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams) 
 	}
 	csvwriter := csv.NewWriter(csvFile)
 	defer csvwriter.Flush()
-	for _, header_row := range headers {
-		log.Print(header_row)
-		csvwriter.Write(header_row)
-	}
+	csvwriter.Write(headers)
 	csvwriter.Flush()
 	csvFile.Close()
 	f, _ := os.Open(fileName)
