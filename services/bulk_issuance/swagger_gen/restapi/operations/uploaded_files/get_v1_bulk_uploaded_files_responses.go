@@ -52,3 +52,45 @@ func (o *GetV1BulkUploadedFilesOK) WriteResponse(rw http.ResponseWriter, produce
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// GetV1BulkUploadedFilesNotFoundCode is the HTTP code returned for type GetV1BulkUploadedFilesNotFound
+const GetV1BulkUploadedFilesNotFoundCode int = 404
+
+/*GetV1BulkUploadedFilesNotFound Not found
+
+swagger:response getV1BulkUploadedFilesNotFound
+*/
+type GetV1BulkUploadedFilesNotFound struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewGetV1BulkUploadedFilesNotFound creates GetV1BulkUploadedFilesNotFound with default headers values
+func NewGetV1BulkUploadedFilesNotFound() *GetV1BulkUploadedFilesNotFound {
+
+	return &GetV1BulkUploadedFilesNotFound{}
+}
+
+// WithPayload adds the payload to the get v1 bulk uploaded files not found response
+func (o *GetV1BulkUploadedFilesNotFound) WithPayload(payload string) *GetV1BulkUploadedFilesNotFound {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the get v1 bulk uploaded files not found response
+func (o *GetV1BulkUploadedFilesNotFound) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GetV1BulkUploadedFilesNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(404)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}

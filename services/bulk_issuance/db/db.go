@@ -3,6 +3,7 @@ package db
 import (
 	"bulk_issuance/config"
 	"bulk_issuance/utils"
+	"errors"
 	"fmt"
 
 	log "github.com/sirupsen/logrus"
@@ -50,12 +51,15 @@ func CreateDBFiles(data *DBFiles) error {
 	return nil
 }
 
-func GetDBFileData(id int) *DBFileData {
+func GetDBFileData(id int) (*DBFileData, error) {
 	filesUpload := &DBFileData{}
 	log.Infof("Getting file data with id : %v", id)
 	result := db.First(&filesUpload, "id=?", id)
-	utils.LogErrorIfAny("Error while getting DBFileData : %v", result.Error)
-	return filesUpload
+	if result.Error != nil {
+		log.Errorf("Error while getting DBFileData : %v", result.Error)
+		return nil, result.Error
+	}
+	return filesUpload, nil
 }
 
 func CreateDBFileData(data *DBFileData) error {
@@ -69,8 +73,8 @@ func GetAllUploadedFilesData() ([]DBFiles, error) {
 	var files []DBFiles
 	log.Info("Getting all uploaded files")
 	if err := db.Find(&files).Error; err != nil {
-		utils.LogErrorIfAny("Error while requesting for all uploaded files : %v", err)
-		return nil, err
+		log.Errorf("Error while requesting for all uploaded files : %v", err)
+		return nil, errors.New("No files uploaded")
 	}
 	return files, nil
 }

@@ -47,7 +47,10 @@ func (o *Scanner) Scan() bool {
 func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 	log.Info("Creating records")
 	data := NewScanner(params.File)
-	totalSuccess, totalErrors, rows := processDataFromCSV(&data, params.HTTPRequest.Header, params.VCName)
+	totalSuccess, totalErrors, rows, err := processDataFromCSV(&data, params.HTTPRequest.Header, params.VCName)
+	if err != nil {
+		return upload_and_create_records.NewPostV1UploadFilesVCNameNotFound()
+	}
 	successFailureCount := map[string]int{
 		"success":   totalSuccess,
 		"error":     totalErrors,
@@ -88,16 +91,19 @@ func addEntryForDbUploadToDatabase(fileName string, totalSuccess int, totalError
 	return db.CreateDBFiles(&dbUpload)
 }
 
-func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, int, [][]string) {
+func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, int, [][]string, error) {
 	var (
 		totalSuccess int = 0
 		totalErrors  int = 0
 	)
 	rows := make([][]string, 0)
 	log.Info("processing all rows from csv")
+	properties, err := utils.GetSchemaProperties(vcName)
+	if err != nil {
+		return 0, 0, rows, err
+	}
 	for data.Scan() {
 		jsonBody := make(map[string]interface{})
-		properties := utils.GetSchemaProperties(vcName)
 		bytes := createReqBody(properties, jsonBody, data)
 		res, err := createSingleRecord(vcName, bytes, header)
 		utils.LogErrorIfAny("Error in creating a record : %v", err)
@@ -113,7 +119,7 @@ func processDataFromCSV(data *Scanner, header http.Header, vcName string) (int, 
 		rows = append(rows, currRow)
 	}
 	log.Info("processed all rows from csv")
-	return totalSuccess, totalErrors, rows
+	return totalSuccess, totalErrors, rows, nil
 }
 
 func appendErrorsToCurrentRow(res *http.Response, data *Scanner, lastColIndex int, currRow []string) []string {

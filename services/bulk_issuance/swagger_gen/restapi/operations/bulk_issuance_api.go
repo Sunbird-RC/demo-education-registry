@@ -50,13 +50,13 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		BinProducer:  runtime.ByteStreamProducer(),
 		JSONProducer: runtime.JSONProducer(),
 
-		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
+		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
 		}),
-		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Responder {
+		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		}),
-		DownloadFileReportGetV1DownloadIDHandler: download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams) middleware.Responder {
+		DownloadFileReportGetV1DownloadIDHandler: download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation download_file_report.GetV1DownloadID has not yet been implemented")
 		}),
 		UploadAndCreateRecordsPostV1UploadFilesVCNameHandler: upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {

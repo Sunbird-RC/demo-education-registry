@@ -33,7 +33,9 @@ paths:
       summary: get sample template
       produces:
         - application/octet-stream
-      security: []
+        - application/json
+      security:
+        - hasRole: ["Issuer"]
       parameters:
         - name: schemaName
           in: path
@@ -48,6 +50,10 @@ paths:
               type: string
           schema:
             $ref: '#/definitions/SampleTemplateResponse'
+        '404':
+          description: Not found
+          schema:
+            type: string
   /v1/bulk/uploadedFiles:
     get:
       tags:
@@ -57,12 +63,17 @@ paths:
         - application/json
       produces:
         - application/json
-      security: []
+      security:
+        - hasRole: ["Issuer"]
       responses:
         '200':
           description: OK
           schema:
             type: object
+        '404':
+          description: Not found
+          schema:
+            type: string
   /v1/uploadFiles/{VCName}:
     post:
       tags:
@@ -89,14 +100,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/CreateRecordResponse'
+        '404':
+          description: Not found
+          schema:
+            type: string
   /v1/download/{id}:
     get:
       tags:
         - downloadFileReport
       summary: download the success and error report of file uploaded
       produces:
+        - application/json
         - application/octet-stream
-      security: []
+      security:
+        - hasRole: ["Issuer"]
       parameters:
         - name: id
           in: path
@@ -111,6 +128,10 @@ paths:
               type: string
           schema:
             $ref: '#/definitions/FileDownload'
+        '404':
+          description: Not found
+          schema:
+            type: string
           
 
 definitions:

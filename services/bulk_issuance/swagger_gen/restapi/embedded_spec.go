@@ -33,9 +33,16 @@ func init() {
   "paths": {
     "/v1/bulk/sample/{schemaName}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
-          "application/octet-stream"
+          "application/octet-stream",
+          "application/json"
         ],
         "tags": [
           "sampleTemplate"
@@ -61,13 +68,25 @@ func init() {
                 "type": "string"
               }
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/v1/bulk/uploadedFiles": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "application/json"
         ],
@@ -84,14 +103,27 @@ func init() {
             "schema": {
               "type": "object"
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/v1/download/{id}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
+          "application/json",
           "application/octet-stream"
         ],
         "tags": [
@@ -117,6 +149,12 @@ func init() {
               "Content-Disposition": {
                 "type": "string"
               }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -161,6 +199,12 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/CreateRecordResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -215,8 +259,15 @@ func init() {
   "paths": {
     "/v1/bulk/sample/{schemaName}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
+          "application/json",
           "application/octet-stream"
         ],
         "tags": [
@@ -243,13 +294,25 @@ func init() {
                 "type": "string"
               }
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/v1/bulk/uploadedFiles": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "application/json"
         ],
@@ -266,14 +329,27 @@ func init() {
             "schema": {
               "type": "object"
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/v1/download/{id}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
+          "application/json",
           "application/octet-stream"
         ],
         "tags": [
@@ -299,6 +375,12 @@ func init() {
               "Content-Disposition": {
                 "type": "string"
               }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -343,6 +425,12 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/CreateRecordResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }

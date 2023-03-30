@@ -76,3 +76,45 @@ func (o *GetV1DownloadIDOK) WriteResponse(rw http.ResponseWriter, producer runti
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// GetV1DownloadIDNotFoundCode is the HTTP code returned for type GetV1DownloadIDNotFound
+const GetV1DownloadIDNotFoundCode int = 404
+
+/*GetV1DownloadIDNotFound Not found
+
+swagger:response getV1DownloadIdNotFound
+*/
+type GetV1DownloadIDNotFound struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewGetV1DownloadIDNotFound creates GetV1DownloadIDNotFound with default headers values
+func NewGetV1DownloadIDNotFound() *GetV1DownloadIDNotFound {
+
+	return &GetV1DownloadIDNotFound{}
+}
+
+// WithPayload adds the payload to the get v1 download Id not found response
+func (o *GetV1DownloadIDNotFound) WithPayload(payload string) *GetV1DownloadIDNotFound {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the get v1 download Id not found response
+func (o *GetV1DownloadIDNotFound) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GetV1DownloadIDNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(404)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}
