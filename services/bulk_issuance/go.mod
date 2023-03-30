@@ -27,7 +27,10 @@ require (
 	github.com/gospotcheck/jwt-go v4.0.0+incompatible // indirect
 	github.com/imroc/req v0.3.2 // indirect
 	github.com/jinzhu/configor v1.2.1 // indirect
+	github.com/jinzhu/gorm v1.9.16 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/lib/pq v1.1.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect

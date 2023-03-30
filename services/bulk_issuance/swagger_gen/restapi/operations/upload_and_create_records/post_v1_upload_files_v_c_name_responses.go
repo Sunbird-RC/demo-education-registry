@@ -54,3 +54,45 @@ func (o *PostV1UploadFilesVCNameOK) WriteResponse(rw http.ResponseWriter, produc
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// PostV1UploadFilesVCNameNotFoundCode is the HTTP code returned for type PostV1UploadFilesVCNameNotFound
+const PostV1UploadFilesVCNameNotFoundCode int = 404
+
+/*PostV1UploadFilesVCNameNotFound Not found
+
+swagger:response postV1UploadFilesVCNameNotFound
+*/
+type PostV1UploadFilesVCNameNotFound struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewPostV1UploadFilesVCNameNotFound creates PostV1UploadFilesVCNameNotFound with default headers values
+func NewPostV1UploadFilesVCNameNotFound() *PostV1UploadFilesVCNameNotFound {
+
+	return &PostV1UploadFilesVCNameNotFound{}
+}
+
+// WithPayload adds the payload to the post v1 upload files v c name not found response
+func (o *PostV1UploadFilesVCNameNotFound) WithPayload(payload string) *PostV1UploadFilesVCNameNotFound {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the post v1 upload files v c name not found response
+func (o *PostV1UploadFilesVCNameNotFound) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *PostV1UploadFilesVCNameNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(404)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}

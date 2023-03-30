@@ -33,9 +33,16 @@ func init() {
   "paths": {
     "/v1/bulk/sample/{schemaName}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
-          "multipart/form-data"
+          "application/octet-stream",
+          "application/json"
         ],
         "tags": [
           "sampleTemplate"
@@ -55,6 +62,17 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SampleTemplateResponse"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -62,7 +80,13 @@ func init() {
     },
     "/v1/bulk/uploadedFiles": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "application/json"
         ],
@@ -79,15 +103,28 @@ func init() {
             "schema": {
               "type": "object"
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
-    "/v1/download/{fileName}": {
+    "/v1/download/{id}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
-          "multipart/form-data"
+          "application/json",
+          "application/octet-stream"
         ],
         "tags": [
           "downloadFileReport"
@@ -95,9 +132,9 @@ func init() {
         "summary": "download the success and error report of file uploaded",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "File name",
-            "name": "fileName",
+            "name": "id",
             "in": "path",
             "required": true
           }
@@ -107,6 +144,17 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -151,6 +199,12 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/CreateRecordResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -205,9 +259,16 @@ func init() {
   "paths": {
     "/v1/bulk/sample/{schemaName}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
-          "multipart/form-data"
+          "application/json",
+          "application/octet-stream"
         ],
         "tags": [
           "sampleTemplate"
@@ -227,6 +288,17 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/SampleTemplateResponse"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -234,7 +306,13 @@ func init() {
     },
     "/v1/bulk/uploadedFiles": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "consumes": [
           "application/json"
         ],
@@ -251,15 +329,28 @@ func init() {
             "schema": {
               "type": "object"
             }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
-    "/v1/download/{fileName}": {
+    "/v1/download/{id}": {
       "get": {
-        "security": [],
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
         "produces": [
-          "multipart/form-data"
+          "application/json",
+          "application/octet-stream"
         ],
         "tags": [
           "downloadFileReport"
@@ -267,9 +358,9 @@ func init() {
         "summary": "download the success and error report of file uploaded",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "File name",
-            "name": "fileName",
+            "name": "id",
             "in": "path",
             "required": true
           }
@@ -279,6 +370,17 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -323,6 +425,12 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/CreateRecordResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
             }
           }
         }

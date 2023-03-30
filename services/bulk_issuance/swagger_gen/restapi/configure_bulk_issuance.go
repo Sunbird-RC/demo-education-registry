@@ -38,13 +38,14 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 	api.UseSwaggerUI()
 	// To continue using redoc as your UI, uncomment the following line
 	// api.UseRedoc()
-	pkg.SetupHandlers(api)
+
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.MultipartformConsumer = runtime.DiscardConsumer
-
-	api.JSONProducer = runtime.JSONProducer()
-	api.MultipartformProducer = runtime.DiscardProducer
+	pkg.SetupHandlers(api)
 	api.HasRoleAuth = pkg.RoleAuthorizer
+	api.BinProducer = runtime.ByteStreamProducer()
+	api.JSONProducer = runtime.JSONProducer()
+
 	if api.HasRoleAuth == nil {
 		api.HasRoleAuth = func(token string, scopes []string) (*models.JWTClaimBody, error) {
 			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
@@ -57,18 +58,18 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
 	if api.SampleTemplateGetV1BulkSampleSchemaNameHandler == nil {
-		api.SampleTemplateGetV1BulkSampleSchemaNameHandler = sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
+		api.SampleTemplateGetV1BulkSampleSchemaNameHandler = sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
 		})
 	}
 	if api.UploadedFilesGetV1BulkUploadedFilesHandler == nil {
-		api.UploadedFilesGetV1BulkUploadedFilesHandler = uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Responder {
+		api.UploadedFilesGetV1BulkUploadedFilesHandler = uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		})
 	}
-	if api.DownloadFileReportGetV1DownloadFileNameHandler == nil {
-		api.DownloadFileReportGetV1DownloadFileNameHandler = download_file_report.GetV1DownloadFileNameHandlerFunc(func(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
-			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
+	if api.DownloadFileReportGetV1DownloadIDHandler == nil {
+		api.DownloadFileReportGetV1DownloadIDHandler = download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation download_file_report.GetV1DownloadIDHandlerFunc has not yet been implemented")
 		})
 	}
 	if api.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {

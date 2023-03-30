@@ -246,3 +246,6 @@ services:
     image: varadeth/sunbird-rc-bulk-issuance:bulk
     ports:
       - "5665:5665"
+    environment:
+      REGISTRY_BASE_URL: http://registry:8081/
+      DATABASE_HOST: db

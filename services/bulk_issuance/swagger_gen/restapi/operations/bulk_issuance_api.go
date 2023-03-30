@@ -47,17 +47,17 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		JSONConsumer:          runtime.JSONConsumer(),
 		MultipartformConsumer: runtime.DiscardConsumer,
 
-		JSONProducer:          runtime.JSONProducer(),
-		MultipartformProducer: runtime.DiscardProducer,
+		BinProducer:  runtime.ByteStreamProducer(),
+		JSONProducer: runtime.JSONProducer(),
 
-		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams) middleware.Responder {
+		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
 		}),
-		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams) middleware.Responder {
+		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		}),
-		DownloadFileReportGetV1DownloadFileNameHandler: download_file_report.GetV1DownloadFileNameHandlerFunc(func(params download_file_report.GetV1DownloadFileNameParams) middleware.Responder {
-			return middleware.NotImplemented("operation download_file_report.GetV1DownloadFileName has not yet been implemented")
+		DownloadFileReportGetV1DownloadIDHandler: download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation download_file_report.GetV1DownloadID has not yet been implemented")
 		}),
 		UploadAndCreateRecordsPostV1UploadFilesVCNameHandler: upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFilesVCName has not yet been implemented")
@@ -101,12 +101,12 @@ type BulkIssuanceAPI struct {
 	//   - multipart/form-data
 	MultipartformConsumer runtime.Consumer
 
+	// BinProducer registers a producer for the following mime types:
+	//   - application/octet-stream
+	BinProducer runtime.Producer
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
-	// MultipartformProducer registers a producer for the following mime types:
-	//   - multipart/form-data
-	MultipartformProducer runtime.Producer
 
 	// HasRoleAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
@@ -119,8 +119,8 @@ type BulkIssuanceAPI struct {
 	SampleTemplateGetV1BulkSampleSchemaNameHandler sample_template.GetV1BulkSampleSchemaNameHandler
 	// UploadedFilesGetV1BulkUploadedFilesHandler sets the operation handler for the get v1 bulk uploaded files operation
 	UploadedFilesGetV1BulkUploadedFilesHandler uploaded_files.GetV1BulkUploadedFilesHandler
-	// DownloadFileReportGetV1DownloadFileNameHandler sets the operation handler for the get v1 download file name operation
-	DownloadFileReportGetV1DownloadFileNameHandler download_file_report.GetV1DownloadFileNameHandler
+	// DownloadFileReportGetV1DownloadIDHandler sets the operation handler for the get v1 download ID operation
+	DownloadFileReportGetV1DownloadIDHandler download_file_report.GetV1DownloadIDHandler
 	// UploadAndCreateRecordsPostV1UploadFilesVCNameHandler sets the operation handler for the post v1 upload files v c name operation
 	UploadAndCreateRecordsPostV1UploadFilesVCNameHandler upload_and_create_records.PostV1UploadFilesVCNameHandler
 	// ServeError is called when an error is received, there is a default handler
@@ -198,11 +198,11 @@ func (o *BulkIssuanceAPI) Validate() error {
 		unregistered = append(unregistered, "MultipartformConsumer")
 	}
 
+	if o.BinProducer == nil {
+		unregistered = append(unregistered, "BinProducer")
+	}
 	if o.JSONProducer == nil {
 		unregistered = append(unregistered, "JSONProducer")
-	}
-	if o.MultipartformProducer == nil {
-		unregistered = append(unregistered, "MultipartformProducer")
 	}
 
 	if o.HasRoleAuth == nil {
@@ -215,8 +215,8 @@ func (o *BulkIssuanceAPI) Validate() error {
 	if o.UploadedFilesGetV1BulkUploadedFilesHandler == nil {
 		unregistered = append(unregistered, "uploaded_files.GetV1BulkUploadedFilesHandler")
 	}
-	if o.DownloadFileReportGetV1DownloadFileNameHandler == nil {
-		unregistered = append(unregistered, "download_file_report.GetV1DownloadFileNameHandler")
+	if o.DownloadFileReportGetV1DownloadIDHandler == nil {
+		unregistered = append(unregistered, "download_file_report.GetV1DownloadIDHandler")
 	}
 	if o.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {
 		unregistered = append(unregistered, "upload_and_create_records.PostV1UploadFilesVCNameHandler")
@@ -279,10 +279,10 @@ func (o *BulkIssuanceAPI) ProducersFor(mediaTypes []string) map[string]runtime.P
 	result := make(map[string]runtime.Producer, len(mediaTypes))
 	for _, mt := range mediaTypes {
 		switch mt {
+		case "application/octet-stream":
+			result["application/octet-stream"] = o.BinProducer
 		case "application/json":
 			result["application/json"] = o.JSONProducer
-		case "multipart/form-data":
-			result["multipart/form-data"] = o.MultipartformProducer
 		}
 
 		if p, ok := o.customProducers[mt]; ok {
@@ -334,7 +334,7 @@ func (o *BulkIssuanceAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/download/{fileName}"] = download_file_report.NewGetV1DownloadFileName(o.context, o.DownloadFileReportGetV1DownloadFileNameHandler)
+	o.handlers["GET"]["/v1/download/{id}"] = download_file_report.NewGetV1DownloadID(o.context, o.DownloadFileReportGetV1DownloadIDHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
