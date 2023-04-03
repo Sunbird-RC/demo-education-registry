@@ -243,7 +243,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: "2181"
       ZOOKEEPER_TICK_TIME: "2000"
   bulk_issuance:
-    image: varadeth/sunbird-rc-bulk-issuance:bulk
+    build: services/bulk_issuance
     ports:
       - "5665:5665"
     environment:
