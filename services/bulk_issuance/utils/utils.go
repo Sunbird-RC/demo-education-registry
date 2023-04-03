@@ -45,7 +45,6 @@ func GetSchemaPropertiesAndSampleValues(key string) ([]string, []string, error) 
 			properties = append(properties, key)
 			sampleValues = append(sampleValues, getSampleValueByType(value.(map[string]interface{})))
 		}
-		sort.Strings(properties)
 		return properties, sampleValues, nil
 	}
 	return nil, nil, err
