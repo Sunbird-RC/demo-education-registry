@@ -135,7 +135,7 @@ func (service DigiLockerService) generatePullURIResponse(request PullURIRequest,
 	response := PullURIResponse{}
 	response.ResponseStatus.Ts = request.Ts
 	response.ResponseStatus.Txn = request.Txn
-	response.DocDetails.URI = "in.gov.covin-" + request.DocDetails.DocType + "-" + request.DocDetails.CertificateId
+	response.DocDetails.URI = config.Config.Digilocker.IDPrefix + "-" + request.DocDetails.DocType + "-" + request.DocDetails.CertificateId
 	response.ResponseStatus.Status = "1"
 	response.DocDetails.DocType = request.DocDetails.DocType
 	response.DocDetails.DigiLockerId = request.DocDetails.DigiLockerId

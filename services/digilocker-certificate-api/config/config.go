@@ -9,6 +9,7 @@ var Config = struct {
 		ClientSecret string `env:"KEYCLOAK_CLIENT_SECRET" default:"**"`
 	}
 	Digilocker struct {
+		IDPrefix    string `env:"DIGILOCKER_DOC_ID_PREFIX" default:"dev.sunbirdrc.vc"`
 		AuthKeyName string `env:"DIGILOCKER_AUTH_KEYNAME" default:"x-digilocker-hmac"`
 		AuthHMACKey string `env:"DIGILOCKER_HMAC_AUTHKEY" default:"***"`
 	}
