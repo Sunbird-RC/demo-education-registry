@@ -272,6 +272,7 @@ services:
       KEYCLOAK_CLIENT_ID: admin-api
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_SECRET}
       DIGILOCKER_HMAC_AUTHKEY: ${DIGILOCKER_HMAC_AUTHKEY}
+      DIGILOCKER_AUTH_KEYNAME: x-digilocker-hmac
       REGISTRY_URL: https://demo-education-registry.xiv.in/registry/
       TEMPLATE_MAPPER: '{"SACER":"html"}'
       SCHEMA_MAPPER: '{"SACER":"ScholarshipForTopClassStudents"}'
