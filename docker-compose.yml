@@ -263,3 +263,19 @@ services:
       MODE: release
       HOST: 0.0.0.0
       PORT: 8086
+  digilocker_certificate_api:
+    build: services/digilocker-certificate-api
+    ports:
+      - "8087:8087"
+    environment:
+      KEYCLOAK_TOKEN_URL: https://demo-education-registry.xiv.in/auth/realms/sunbird-rc/protocol/openid-connect/token
+      KEYCLOAK_CLIENT_ID: admin-api
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_SECRET}
+      DIGILOCKER_HMAC_AUTHKEY: ${DIGILOCKER_HMAC_AUTHKEY}
+      REGISTRY_URL: https://demo-education-registry.xiv.in/registry/
+      TEMPLATE_MAPPER: '{"SACER":"html"}'
+      SCHEMA_MAPPER: '{"SACER":"ScholarshipForTopClassStudents"}'
+      LOG_LEVEL: info
+      MODE: release
+      HOST: 0.0.0.0
+      PORT: 8087

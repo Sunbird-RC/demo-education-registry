@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "PreMatricScholarship": {
+      "$ref": "#/definitions/PreMatricScholarship"
+    }
+  },
+  "required": [
+    "PreMatricScholarship"
+  ],
+  "title": "PreMatricScholarship",
+  "definitions": {
+    "PreMatricScholarship": {
+      "$id": "#/properties/PreMatricScholarship",
+      "type": "object",
+      "title": "The PreMatricScholarship Schema",
+      "required": [
+        "name",
+        "contact",
+        "dateofaward",
+        "validupto",
+        "nameofScheme",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "email": {
+          "type": "string",
+          "title": "Email"
+        },
+        "contact": {
+          "type": "string",
+          "title": "Contact"
+        },
+        "gender": {
+          "type": "string",
+          "title": "Gender"
+        },
+        "institute": {
+          "type": "string",
+          "title": "Institute"
+        },
+        "academicYear": {
+          "type": "string",
+          "title": "Academic Year"
+        },
+        "rollNo": {
+          "type": "string",
+          "title": "Roll No"
+        },
+        "dateofaward": {
+          "type": "string",
+          "title": "Date Of Award",
+          "format": "date"
+        },
+        "validupto": {
+          "type": "string",
+          "title": "Valid Till",
+          "format": "date"
+        },
+        "nameofScheme": {
+          "type": "string",
+          "title": "Name of Scheme"
+        }
+      }
+    }
+  },
+  "_osConfig": {
+    "uniqueIndexFields": [],
+    "privateFields": [],
+    "privateFieldConfig": "HASH",
+    "internalFieldConfig": "FULL",
+    "ownershipAttributes": [
+      {
+        "email": "/email",
+        "mobile": "/contact",
+        "userId": "/email"
+      }
+    ],
+    "systemFields": [
+      "osCreatedAt",
+      "osUpdatedAt",
+      "osCreatedBy",
+      "osUpdatedBy"
+    ],
+    "roles": ["scholarship"],
+    "inviteRoles": [
+      "anonymous"
+    ],
+    "enableLogin": true,
+    "credentialTemplate": {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://gist.githubusercontent.com/varadeth/c9cc5950f965dbc9f67e4e9bfa91a35b/raw/c934bd3c9cc24fdc0e840db81f105cf3c348a99e/prematricscholarship.json"
+      ],
+      "type": [
+        "VerifiableCredential"
+      ],
+      "issuanceDate": "{{osCreatedAt}}",
+      "credentialSubject": {
+        "type": "Student",
+        "name": "{{name}}",
+        "gender": "{{gender}}",
+        "institute": "{{institute}}",
+        "academicYear": "{{academicYear}}",
+        "rollNo": "{{rollNo}}"
+      },
+      "evidence": {
+        "type": "Scholarship",
+        "nameofScheme": "{{nameofScheme}}",
+        "dateofaward": "{{dateofaward}}",
+        "validupto": "{{validupto}}"
+      },
+      "issuer": "did:web:sunbirdrc.dev/vc/scholarship"
+    },
+    "certificateTemplates": {
+      "html": "minio://Issuer/6b8e74f6-9c86-47e5-9aa2-1e5b2e21f1b2/templates/documents/5145c5e0-2272-43ca-aa8c-04d9cdcc0a43-prematricscholarship.svg"
+    }
+  }
+}
