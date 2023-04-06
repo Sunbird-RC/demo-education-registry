@@ -96,3 +96,45 @@ func (o *PostV1UploadFilesVCNameNotFound) WriteResponse(rw http.ResponseWriter, 
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// PostV1UploadFilesVCNameInternalServerErrorCode is the HTTP code returned for type PostV1UploadFilesVCNameInternalServerError
+const PostV1UploadFilesVCNameInternalServerErrorCode int = 500
+
+/*PostV1UploadFilesVCNameInternalServerError Internal Server Error
+
+swagger:response postV1UploadFilesVCNameInternalServerError
+*/
+type PostV1UploadFilesVCNameInternalServerError struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewPostV1UploadFilesVCNameInternalServerError creates PostV1UploadFilesVCNameInternalServerError with default headers values
+func NewPostV1UploadFilesVCNameInternalServerError() *PostV1UploadFilesVCNameInternalServerError {
+
+	return &PostV1UploadFilesVCNameInternalServerError{}
+}
+
+// WithPayload adds the payload to the post v1 upload files v c name internal server error response
+func (o *PostV1UploadFilesVCNameInternalServerError) WithPayload(payload string) *PostV1UploadFilesVCNameInternalServerError {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the post v1 upload files v c name internal server error response
+func (o *PostV1UploadFilesVCNameInternalServerError) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *PostV1UploadFilesVCNameInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(500)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}

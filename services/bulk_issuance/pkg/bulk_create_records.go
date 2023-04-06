@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Clever/csvlint"
 	"github.com/go-openapi/runtime/middleware"
 	log "github.com/sirupsen/logrus"
 )
@@ -25,28 +26,36 @@ type Scanner struct {
 	Row    []string
 }
 
-func NewScanner(o io.Reader) Scanner {
+func NewScanner(o io.Reader) (Scanner, error) {
 	csv_o := csv.NewReader(o)
 	header, e := csv_o.Read()
 	if e != nil {
-		return Scanner{}
+		log.Errorf("Parsing error : %v", e)
+		return Scanner{}, e
 	}
 	m := map[string]int{}
 	for n, s := range header {
 		m[strings.TrimSpace(s)] = n
 	}
-	return Scanner{Reader: csv_o, Head: m}
+	return Scanner{Reader: csv_o, Head: m}, nil
 }
 
 func (o *Scanner) Scan() bool {
 	a, e := o.Reader.Read()
+	if e != nil {
+		log.Errorf("Parsing error : %v", e)
+	}
 	o.Row = a
 	return e == nil
 }
 
 func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 	log.Info("Creating records")
-	data := NewScanner(params.File)
+	data, err := NewScanner(params.File)
+	csvError, _, _ := csvlint.Validate(params.File, ',', false)
+	if data.Reader == nil || err != nil || len(csvError) != 0 {
+		return upload_and_create_records.NewPostV1UploadFilesVCNameInternalServerError().WithPayload("Invalid CSV File")
+	}
 	totalSuccess, totalErrors, rows, err := processDataFromCSV(&data, params.HTTPRequest.Header, params.VCName)
 	if err != nil {
 		return upload_and_create_records.NewPostV1UploadFilesVCNameNotFound()

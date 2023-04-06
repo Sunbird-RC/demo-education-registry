@@ -206,6 +206,12 @@ func init() {
             "schema": {
               "type": "string"
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
@@ -429,6 +435,12 @@ func init() {
           },
           "404": {
             "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
             "schema": {
               "type": "string"
             }
