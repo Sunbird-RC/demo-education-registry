@@ -30,11 +30,13 @@
         },
         "email": {
           "type": "string",
-          "title": "Email"
+          "title": "Email",
+          "format": "email"
         },
         "contact": {
           "type": "string",
-          "title": "Contact"
+          "title": "Contact",
+          "pattern": "^[6-9]\\d{9}$"
         },
         "gender": {
           "type": "string",

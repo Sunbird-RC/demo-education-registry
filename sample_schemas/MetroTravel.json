@@ -28,11 +28,13 @@
         },
         "contact": {
           "type": "string",
-          "title": "Contact"
+          "title": "Contact",
+          "pattern": "^[6-9]\\d{9}$"
         },
         "email": {
           "type": "string",
-          "title": "Email"
+          "title": "Email",
+          "format": "email"
         },
         "dateofBirth": {
           "type": "string",
