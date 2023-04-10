@@ -50,14 +50,14 @@ func NewBulkIssuanceAPI(spec *loads.Document) *BulkIssuanceAPI {
 		BinProducer:  runtime.ByteStreamProducer(),
 		JSONProducer: runtime.JSONProducer(),
 
-		SampleTemplateGetV1BulkSampleSchemaNameHandler: sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
-			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
-		}),
-		UploadedFilesGetV1BulkUploadedFilesHandler: uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
-			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
-		}),
 		DownloadFileReportGetV1DownloadIDHandler: download_file_report.GetV1DownloadIDHandlerFunc(func(params download_file_report.GetV1DownloadIDParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation download_file_report.GetV1DownloadID has not yet been implemented")
+		}),
+		SampleTemplateGetV1SampleSchemaNameHandler: sample_template.GetV1SampleSchemaNameHandlerFunc(func(params sample_template.GetV1SampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation sample_template.GetV1SampleSchemaName has not yet been implemented")
+		}),
+		UploadedFilesGetV1UploadedFilesHandler: uploaded_files.GetV1UploadedFilesHandlerFunc(func(params uploaded_files.GetV1UploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
+			return middleware.NotImplemented("operation uploaded_files.GetV1UploadedFiles has not yet been implemented")
 		}),
 		UploadAndCreateRecordsPostV1UploadFilesVCNameHandler: upload_and_create_records.PostV1UploadFilesVCNameHandlerFunc(func(params upload_and_create_records.PostV1UploadFilesVCNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation upload_and_create_records.PostV1UploadFilesVCName has not yet been implemented")
@@ -115,12 +115,12 @@ type BulkIssuanceAPI struct {
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// SampleTemplateGetV1BulkSampleSchemaNameHandler sets the operation handler for the get v1 bulk sample schema name operation
-	SampleTemplateGetV1BulkSampleSchemaNameHandler sample_template.GetV1BulkSampleSchemaNameHandler
-	// UploadedFilesGetV1BulkUploadedFilesHandler sets the operation handler for the get v1 bulk uploaded files operation
-	UploadedFilesGetV1BulkUploadedFilesHandler uploaded_files.GetV1BulkUploadedFilesHandler
 	// DownloadFileReportGetV1DownloadIDHandler sets the operation handler for the get v1 download ID operation
 	DownloadFileReportGetV1DownloadIDHandler download_file_report.GetV1DownloadIDHandler
+	// SampleTemplateGetV1SampleSchemaNameHandler sets the operation handler for the get v1 sample schema name operation
+	SampleTemplateGetV1SampleSchemaNameHandler sample_template.GetV1SampleSchemaNameHandler
+	// UploadedFilesGetV1UploadedFilesHandler sets the operation handler for the get v1 uploaded files operation
+	UploadedFilesGetV1UploadedFilesHandler uploaded_files.GetV1UploadedFilesHandler
 	// UploadAndCreateRecordsPostV1UploadFilesVCNameHandler sets the operation handler for the post v1 upload files v c name operation
 	UploadAndCreateRecordsPostV1UploadFilesVCNameHandler upload_and_create_records.PostV1UploadFilesVCNameHandler
 	// ServeError is called when an error is received, there is a default handler
@@ -209,14 +209,14 @@ func (o *BulkIssuanceAPI) Validate() error {
 		unregistered = append(unregistered, "HasRoleAuth")
 	}
 
-	if o.SampleTemplateGetV1BulkSampleSchemaNameHandler == nil {
-		unregistered = append(unregistered, "sample_template.GetV1BulkSampleSchemaNameHandler")
-	}
-	if o.UploadedFilesGetV1BulkUploadedFilesHandler == nil {
-		unregistered = append(unregistered, "uploaded_files.GetV1BulkUploadedFilesHandler")
-	}
 	if o.DownloadFileReportGetV1DownloadIDHandler == nil {
 		unregistered = append(unregistered, "download_file_report.GetV1DownloadIDHandler")
+	}
+	if o.SampleTemplateGetV1SampleSchemaNameHandler == nil {
+		unregistered = append(unregistered, "sample_template.GetV1SampleSchemaNameHandler")
+	}
+	if o.UploadedFilesGetV1UploadedFilesHandler == nil {
+		unregistered = append(unregistered, "uploaded_files.GetV1UploadedFilesHandler")
 	}
 	if o.UploadAndCreateRecordsPostV1UploadFilesVCNameHandler == nil {
 		unregistered = append(unregistered, "upload_and_create_records.PostV1UploadFilesVCNameHandler")
@@ -326,15 +326,15 @@ func (o *BulkIssuanceAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/bulk/sample/{schemaName}"] = sample_template.NewGetV1BulkSampleSchemaName(o.context, o.SampleTemplateGetV1BulkSampleSchemaNameHandler)
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/v1/bulk/uploadedFiles"] = uploaded_files.NewGetV1BulkUploadedFiles(o.context, o.UploadedFilesGetV1BulkUploadedFilesHandler)
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
 	o.handlers["GET"]["/v1/download/{id}"] = download_file_report.NewGetV1DownloadID(o.context, o.DownloadFileReportGetV1DownloadIDHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v1/sample/{schemaName}"] = sample_template.NewGetV1SampleSchemaName(o.context, o.SampleTemplateGetV1SampleSchemaNameHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v1/uploadedFiles"] = uploaded_files.NewGetV1UploadedFiles(o.context, o.UploadedFilesGetV1UploadedFilesHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

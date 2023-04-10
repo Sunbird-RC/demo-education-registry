@@ -57,13 +57,13 @@ func configureAPI(api *operations.BulkIssuanceAPI) http.Handler {
 	//
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
-	if api.SampleTemplateGetV1BulkSampleSchemaNameHandler == nil {
-		api.SampleTemplateGetV1BulkSampleSchemaNameHandler = sample_template.GetV1BulkSampleSchemaNameHandlerFunc(func(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
+	if api.SampleTemplateGetV1SampleSchemaNameHandler == nil {
+		api.SampleTemplateGetV1SampleSchemaNameHandler = sample_template.GetV1SampleSchemaNameHandlerFunc(func(params sample_template.GetV1SampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation sample_template.GetV1BulkSampleSchemaName has not yet been implemented")
 		})
 	}
-	if api.UploadedFilesGetV1BulkUploadedFilesHandler == nil {
-		api.UploadedFilesGetV1BulkUploadedFilesHandler = uploaded_files.GetV1BulkUploadedFilesHandlerFunc(func(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
+	if api.UploadedFilesGetV1UploadedFilesHandler == nil {
+		api.UploadedFilesGetV1UploadedFilesHandler = uploaded_files.GetV1UploadedFilesHandlerFunc(func(params uploaded_files.GetV1UploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
 			return middleware.NotImplemented("operation uploaded_files.GetV1BulkUploadedFiles has not yet been implemented")
 		})
 	}

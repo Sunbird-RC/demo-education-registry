@@ -31,88 +31,6 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
-    "/v1/bulk/sample/{schemaName}": {
-      "get": {
-        "security": [
-          {
-            "hasRole": [
-              "Issuer"
-            ]
-          }
-        ],
-        "produces": [
-          "application/octet-stream",
-          "application/json"
-        ],
-        "tags": [
-          "sampleTemplate"
-        ],
-        "summary": "get sample template",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "schema name",
-            "name": "schemaName",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SampleTemplateResponse"
-            },
-            "headers": {
-              "Content-Disposition": {
-                "type": "string"
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "/v1/bulk/uploadedFiles": {
-      "get": {
-        "security": [
-          {
-            "hasRole": [
-              "Issuer"
-            ]
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "uploadedFiles"
-        ],
-        "summary": "get uploaded files",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
     "/v1/download/{id}": {
       "get": {
         "security": [
@@ -144,6 +62,53 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v1/sample/{schemaName}": {
+      "get": {
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
+        "produces": [
+          "application/octet-stream",
+          "application/json"
+        ],
+        "tags": [
+          "sampleTemplate"
+        ],
+        "summary": "get sample template",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "schema name",
+            "name": "schemaName",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SampleTemplateResponse"
             },
             "headers": {
               "Content-Disposition": {
@@ -209,6 +174,41 @@ func init() {
           },
           "500": {
             "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v1/uploadedFiles": {
+      "get": {
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "uploadedFiles"
+        ],
+        "summary": "get uploaded files",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Not found",
             "schema": {
               "type": "string"
             }
@@ -263,88 +263,6 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
-    "/v1/bulk/sample/{schemaName}": {
-      "get": {
-        "security": [
-          {
-            "hasRole": [
-              "Issuer"
-            ]
-          }
-        ],
-        "produces": [
-          "application/json",
-          "application/octet-stream"
-        ],
-        "tags": [
-          "sampleTemplate"
-        ],
-        "summary": "get sample template",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "schema name",
-            "name": "schemaName",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SampleTemplateResponse"
-            },
-            "headers": {
-              "Content-Disposition": {
-                "type": "string"
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "/v1/bulk/uploadedFiles": {
-      "get": {
-        "security": [
-          {
-            "hasRole": [
-              "Issuer"
-            ]
-          }
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "uploadedFiles"
-        ],
-        "summary": "get uploaded files",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
     "/v1/download/{id}": {
       "get": {
         "security": [
@@ -376,6 +294,53 @@ func init() {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/FileDownload"
+            },
+            "headers": {
+              "Content-Disposition": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v1/sample/{schemaName}": {
+      "get": {
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/octet-stream"
+        ],
+        "tags": [
+          "sampleTemplate"
+        ],
+        "summary": "get sample template",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "schema name",
+            "name": "schemaName",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SampleTemplateResponse"
             },
             "headers": {
               "Content-Disposition": {
@@ -441,6 +406,41 @@ func init() {
           },
           "500": {
             "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v1/uploadedFiles": {
+      "get": {
+        "security": [
+          {
+            "hasRole": [
+              "Issuer"
+            ]
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "uploadedFiles"
+        ],
+        "summary": "get uploaded files",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Not found",
             "schema": {
               "type": "string"
             }

@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
+func downloadSampleFile(params sample_template.GetV1SampleSchemaNameParams, principal *models.JWTClaimBody) middleware.Responder {
 	log.Infof("Downloading sample file with name %v", (params.SchemaName + ".csv"))
 	response := sample_template.GetV1BulkSampleSchemaNameOK{}
 	schemaProperties, sampleValues, err := utils.GetSchemaPropertiesAndSampleValues(params.SchemaName)

@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func listFiles(params uploaded_files.GetV1BulkUploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
+func listFiles(params uploaded_files.GetV1UploadedFilesParams, principal *models.JWTClaimBody) middleware.Responder {
 	log.Info("Compiling a list of all uploaded files")
 	response := uploaded_files.GetV1BulkUploadedFilesOK{}
 	files, err := db.GetAllUploadedFilesData()
