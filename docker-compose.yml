@@ -43,6 +43,7 @@ services:
       - pdf_url=http://certificate-api:8078/api/v1/certificatePDF
       - certificate_health_check_url=http://certificate-api:8078/health
       - sign_url=http://certificate-signer:8079/sign
+      - verify_url=http://certificate-signer:8079/verify
       - sign_health_check_url=http://certificate-signer:8079/health
       - enable_external_templates=true
       - connectionInfo_uri=jdbc:postgresql://db:5432/registry
