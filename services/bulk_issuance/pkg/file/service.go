@@ -19,3 +19,8 @@ func CreateFile(fileName string, values [][]string) {
 	err = csvFile.Close()
 	utils.LogErrorIfAny("Error while closing the file with name %v : %v", err, fileName)
 }
+
+func DeleteFile(fileName string) {
+	err := os.Remove(fileName)
+	utils.LogErrorIfAny("Error in deleting file : ", err)
+}

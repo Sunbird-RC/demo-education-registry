@@ -58,7 +58,7 @@ func createRecords(params upload_and_create_records.PostV1UploadFilesVCNameParam
 	}
 	totalSuccess, totalErrors, rows, err := processDataFromCSV(&data, params.HTTPRequest.Header, params.VCName)
 	if err != nil {
-		return upload_and_create_records.NewPostV1UploadFilesVCNameNotFound()
+		return upload_and_create_records.NewPostV1UploadFilesVCNameNotFound().WithPayload(err.Error())
 	}
 	successFailureCount := map[string]int{
 		"success":   totalSuccess,

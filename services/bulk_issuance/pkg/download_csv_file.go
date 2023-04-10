@@ -30,5 +30,6 @@ func downloadReportFile(params download_file_report.GetV1DownloadIDParams, princ
 	utils.LogErrorIfAny("Error while opening a file with name %v : %v ", err, file.Filename)
 	response.WithContentDisposition("attachment; filename=\"" + file.Filename + "\"").WithPayload(f)
 	log.Infof("Downloading file with name : %v", file.Filename)
+	file_service.DeleteFile(file.Filename)
 	return &response
 }

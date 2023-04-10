@@ -28,5 +28,6 @@ func downloadSampleFile(params sample_template.GetV1BulkSampleSchemaNameParams, 
 	f, err := os.Open(params.SchemaName + ".csv")
 	utils.LogErrorIfAny("Error while opening file : %v", err)
 	response.WithContentDisposition("attachment; filename=\"" + params.SchemaName + ".csv\"").WithPayload(f)
+	file_service.DeleteFile(params.SchemaName + ".csv")
 	return &response
 }
