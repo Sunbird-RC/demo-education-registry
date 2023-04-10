@@ -2,12 +2,12 @@ package pkg
 
 import (
 	"bulk_issuance/db"
-	file_service "bulk_issuance/pkg/file"
 	"bulk_issuance/swagger_gen/models"
 	"bulk_issuance/swagger_gen/restapi/operations/download_file_report"
 	"bulk_issuance/utils"
+	"bytes"
+	"encoding/csv"
 	"encoding/json"
-	"os"
 	"strings"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -25,11 +25,11 @@ func downloadReportFile(params download_file_report.GetV1DownloadIDParams, princ
 	err = json.Unmarshal(file.RowData, &data)
 	utils.LogErrorIfAny("Error while unmarshalling row data for downloading report of file : %v ", err)
 	data = append([][]string{strings.Split(file.Headers, ",")}, data...)
-	file_service.CreateFile(file.Filename, data)
-	f, err := os.Open(file.Filename)
+	b := new(bytes.Buffer)
+	w := csv.NewWriter(b)
+	w.WriteAll(data)
 	utils.LogErrorIfAny("Error while opening a file with name %v : %v ", err, file.Filename)
-	response.WithContentDisposition("attachment; filename=\"" + file.Filename + "\"").WithPayload(f)
+	response.WithContentDisposition("attachment; filename=\"" + file.Filename + "\"").WithPayload(b)
 	log.Infof("Downloading file with name : %v", file.Filename)
-	file_service.DeleteFile(file.Filename)
 	return &response
 }
