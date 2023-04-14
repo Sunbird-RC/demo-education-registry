@@ -251,20 +251,6 @@ services:
     environment:
       REGISTRY_BASE_URL: http://registry:8081/
       DATABASE_HOST: db
-  sso_service:
-    build: services/digilocker-meripehchaan-sso-service
-    ports:
-      - "8086:8086"
-    environment:
-      DIGILOCKER_SSO_TOKEN_URL: ${DIGILOCKER_SSO_TOKEN_URL}
-      DIGILOCKER_SSO_CLIENT_ID: ${DIGILOCKER_SSO_CLIENT_ID}
-      DIGILOCKER_SSO_CLIENT_SECRET: ${DIGILOCKER_SSO_CLIENT_SECRET}
-      DIGILOCKER_SSO_CODE_VERIFIER: ${DIGILOCKER_SSO_CODE_VERIFIER}
-      DIGILOCKER_SSO_REDIRECT_URL: ${DIGILOCKER_SSO_REDIRECT_URL}
-      LOG_LEVEL: info
-      MODE: release
-      HOST: 0.0.0.0
-      PORT: 8086
   digilocker_certificate_api:
     build: services/digilocker-certificate-api
     ports:
