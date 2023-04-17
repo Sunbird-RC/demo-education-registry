@@ -28,11 +28,13 @@
         },
         "contact": {
           "type": "string",
-          "title": "Contact"
+          "title": "Contact",
+          "pattern": "^[6-9]\\d{9}$"
         },
         "email": {
           "type": "string",
-          "title": "Email"
+          "title": "Email",
+          "format": "email"
         },
         "dateofBirth": {
           "type": "string",
@@ -103,7 +105,7 @@
       "issuer": "did:web:sunbirdrc.dev/vc/metroTravel"
     },
     "certificateTemplates": {
-      "html": "minio://Issuer/e45edd98-e55b-406e-a8a5-0f3ea6f92d83/templates/documents/d6c19e70-e0a3-4006-8d1c-8d155b8d82ce-Travel Card.svg"
+      "html": "minio://Issuer/cb6df4c3-5409-4fa2-86fc-e7558add509c/templates/documents/f05c0407-386a-443d-ac13-f61d05c0d22a-Travel Card.svg"
     }
   }
 }
