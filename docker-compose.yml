@@ -245,14 +245,14 @@ services:
       ZOOKEEPER_CLIENT_PORT: "2181"
       ZOOKEEPER_TICK_TIME: "2000"
   bulk_issuance:
-    build: services/bulk_issuance
+    image: sunbirdrc/sunbird-rc-bulk-issuance:bulk
     ports:
       - "5665:5665"
     environment:
       REGISTRY_BASE_URL: http://registry:8081/
       DATABASE_HOST: db
   digilocker_certificate_api:
-    build: services/digilocker-certificate-api
+    image: sunbirdrc/sunbird-rc-digilocker-certificate-api
     ports:
       - "8087:8087"
     environment:

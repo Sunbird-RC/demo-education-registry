@@ -1,7 +1,7 @@
 SPEC_FILE := ./interfaces/bulk_issuance_api.yaml
 GOPATH := $(shell go env GOPATH)
 source := $(wildcard *.go **/*.go */*/*.go)
-IMAGE := varadeth/sunbird-rc-bulk-issuance:bulk
+IMAGE := sunbirdrc/sunbird-rc-bulk-issuance:bulk
 all: bulk_issuance-server
 
 deps:
