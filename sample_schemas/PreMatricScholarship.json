@@ -118,7 +118,7 @@
       "issuer": "did:web:sunbirdrc.dev/vc/scholarship"
     },
     "certificateTemplates": {
-      "html": "minio://Issuer/6b8e74f6-9c86-47e5-9aa2-1e5b2e21f1b2/templates/documents/5145c5e0-2272-43ca-aa8c-04d9cdcc0a43-prematricscholarship.svg"
+      "html": "minio://Issuer/3831635a-7ea3-44d4-a2cb-c50ef9f00ad6/templates/documents/ab8f215c-9f30-4f9f-9458-fb9b1d11cd5c-prematricscholarship.svg"
     }
   }
 }
