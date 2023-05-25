@@ -6,6 +6,12 @@ x-redash-service: &redash-service
     - redis
   env_file: ./.env
   restart: always
+x-redash-environment: &redash-environment
+  REDASH_LOG_LEVEL: "INFO"
+  REDASH_REDIS_URL: "redis://redis:6379/0"
+  REDASH_DATABASE_URL: "postgresql://postgres:postgres@db/registry"
+  REDASH_RATELIMIT_ENABLED: "false"
+  REDASH_GUNICORN_TIMEOUT: 60
 services:
   redis:
     image: redis
@@ -171,23 +177,27 @@ services:
     ports:
       - "5678:5000"
     environment:
+      <<: *redash-environment
       REDASH_WEB_WORKERS: 4
   scheduler:
     <<: *redash-service
     command: scheduler
     environment:
+      <<: *redash-environment
       QUEUES: "celery"
       WORKERS_COUNT: 1
   scheduled_worker:
     <<: *redash-service
     command: worker
     environment:
+      <<: *redash-environment
       QUEUES: "scheduled_queries,schemas"
       WORKERS_COUNT: 1
   adhoc_worker:
     <<: *redash-service
     command: worker
     environment:
+      <<: *redash-environment
       QUEUES: "queries"
       WORKERS_COUNT: 2
   nginx:
