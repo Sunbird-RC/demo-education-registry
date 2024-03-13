@@ -228,6 +228,7 @@
                 "title": "AFFLILIATION_DETAILS",
                 "redirectTo": "/profile/institute",
                 "langKey" : "institute",
+                "attestationName": "instituteAffiliation",
                 "fieldsets": [
                     {
                         "definition": "Affiliation",
@@ -425,6 +426,7 @@
                 "type": "property:academicQualifications",
                 "redirectTo": "/profile/teacher",
                 "langKey" : "teacherStudent",
+                "attestationName": "teacherAcademicsQualification",
                 "fieldsets": [
                     {
                         "definition": "AcademicQualification",
@@ -438,6 +440,7 @@
                                         "formlyConfig": {
                                             "type": "input",
                                             "templateOptions": {
+                                                "required": true,
                                                 "type": "hidden"
                                             }
                                         }
@@ -448,7 +451,7 @@
                                 "name": "instituteName",
                                 "required": true,
                                 "autocomplete": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "body": {
                                         "filters": {
                                             "instituteName": {
@@ -464,14 +467,16 @@
                                     "responseKey": "instituteName"
                                 },
                                 "autofill": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "method": "POST",
                                     "body": {
                                         "filters": {
                                             "instituteName": {
                                                 "contains": "{{value}}"
                                             },
-                                            "instituteAffiliation._osStatus": "PUBLISHED"
+                                            "instituteAffiliation._osState": {
+                                                "eq": "PUBLISHED"
+                                            }
                                         },
                                         "limit": 20,
                                         "offset": 0
@@ -496,6 +501,38 @@
                             },
                             {
                                 "name": "marks"
+                            },
+                            {
+                                "name": "attest",
+                                "custom": true,
+                                "element": {
+                                    "title": "SEND_FOR_ATTENSTATION",
+                                    "widget": {
+                                        "formlyConfig": {
+                                            "type": "checkbox",
+                                            "fieldGroupClassName": "controls",
+                                            "className": "checkbox",
+                                            "templateOptions": {
+                                                "required": true
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "notes",
+                                "custom": true,
+                                "element": {
+                                    "title": "NOTE",
+                                    "widget": {
+                                        "formlyConfig": {
+                                            "type": "string",
+                                            "fieldGroupClassName": "controls",
+                                            "className": "input",
+                                              "hideExpression": "!model.attest"
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }
@@ -508,6 +545,7 @@
                 "type": "property:experience",
                 "redirectTo": "/profile/teacher",
                 "langKey" : "teacherStudent",
+                "attestationName": "teacherExperience",
                 "fieldsets": [
                     {
                         "definition": "ExperienceType",
@@ -521,6 +559,7 @@
                                         "formlyConfig": {
                                             "type": "input",
                                             "templateOptions": {
+                                                "required": true,
                                                 "type": "hidden"
                                             }
                                         }
@@ -531,7 +570,7 @@
                                 "name": "instituteName",
                                 "required": true,
                                 "autocomplete": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "body": {
                                         "filters": {
                                             "instituteName": {
@@ -547,7 +586,7 @@
                                     "responseKey": "instituteName"
                                 },
                                 "autofill": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "method": "POST",
                                     "body": {
                                         "filters": {
@@ -565,7 +604,7 @@
                                     ],
                                     "dropdowns": [
                                         {
-                                            "grades": "affiliation[0].classes"
+                                            "grades": "affiliation.classes"
                                         }
                                     ]
                                 }
@@ -834,6 +873,7 @@
                 "type": "property:educationDetails",
                 "redirectTo": "/profile/student",
                 "langKey" : "teacherStudent",
+                "attestationName": "studentInstituteAttest",
                 "fieldsets": [
                     {
                         "definition": "EducationType",
@@ -847,6 +887,7 @@
                                         "formlyConfig": {
                                             "type": "input",
                                             "templateOptions": {
+                                                "required": true,
                                                 "type": "hidden"
                                             }
                                         }
@@ -857,7 +898,7 @@
                                 "name": "institute",
                                 "required": true,
                                 "autocomplete": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "body": {
                                         "filters": {
                                             "instituteName": {
@@ -873,7 +914,7 @@
                                     "responseKey": "instituteName"
                                 },
                                 "autofill": {
-                                    "apiURL": "https://demo-education-registry.xiv.in/registry/api/v1/Institute/search",
+                                    "apiURL": "/Institute/search",
                                     "method": "POST",
                                     "body": {
                                         "filters": {
@@ -891,7 +932,7 @@
                                     ],
                                     "dropdowns": [
                                         {
-                                            "class": "affiliation[0].classes"
+                                            "class": "affiliation.classes"
                                         }
                                     ]
                                 }

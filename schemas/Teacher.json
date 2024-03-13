@@ -26,17 +26,13 @@
           "$ref": "Common.json/#/definitions/ContactDetails"
         },
         "academicQualifications": {
-          "type": "array",
-          "items": {
-            "$ref": "Common.json/#/definitions/AcademicQualification"
-          },
+          "type": "object",
+          "$ref": "Common.json/#/definitions/AcademicQualification",
           "title": "Education Details"
         },
         "experience": {
-          "type": "array",
-          "items": {
-            "$ref": "Common.json/#/definitions/ExperienceType"
-          },
+          "type": "object",
+          "$ref": "Common.json/#/definitions/ExperienceType",
           "title": "Professional Experience"
         }
       }
@@ -76,7 +72,7 @@
     "attestationPolicies": [
       {
         "name": "teacherExperience",
-        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.experience.*.instituteOSID#))",
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.experience.instituteOSID#))",
         "type": "MANUAL",
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Institute",
         "attestationProperties": {
@@ -85,7 +81,7 @@
       },
       {
         "name": "teacherAcademicsQualification",
-        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.academicQualifications.*.instituteOSID#))",
+        "conditions": "(ATTESTOR#$.osid#.contains(REQUESTER#$.academicQualifications.instituteOSID#))",
         "type": "MANUAL",
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Institute",
         "attestationProperties": {
