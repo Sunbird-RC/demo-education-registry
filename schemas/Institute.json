@@ -28,8 +28,9 @@
         },
         "establishmentYear": {
           "$id": "#/properties/establishmentYear",
-          "type": "string",
-          "title": "Year of establishment of institute"
+          "type": "integer",
+          "title": "Year of establishment of institute",
+          "minimum": 1950
         },
         "gstnId": {
           "$id": "#/properties/gstnId",
@@ -98,10 +99,8 @@
           "title": "Principal / Dean / Head - Mobile"
         },
         "affiliation": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Affiliation"
-          },
+          "type": "object",
+          "$ref": "#/definitions/Affiliation",
           "title": "Affiliation"
         }
       }
@@ -186,7 +185,10 @@
         }
       }
     ],
-    "internalFields": [],
+    "internalFields": [
+      "$.adminEmail",
+      "$.adminMobile"
+    ],
     "inviteRoles":["anonymous"],
     "enableLogin": true,
     "ownershipAttributes": [

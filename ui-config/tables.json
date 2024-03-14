@@ -38,6 +38,10 @@
                         "formate": "date"
                     },
                     {
+                        "name": "attestationName",
+                        "title": "ATTESTATION_NAME"
+                    },
+                    {
                         "name": "requestorName",
                         "title": "NAME"
                     },

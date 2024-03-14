@@ -18,7 +18,7 @@
                         "editform":"institute-setup",
                         "fields": {
                             "includes": ["*"],
-                            "excludes": ["affiliation"]
+                            "excludes": ["instituteAffiliation", "affiliation"]
                         },
                         "propertyShowFirst" : [ "instituteName", "email"]
                     },
@@ -27,13 +27,32 @@
                         "title": "AFFILIATION_DETAILS",
                         "add": true,
                         "addform":"affiliation",
-                        "claimEdit": true,
+                        "claimEdit": false,
                         "editform":"affiliation",
                         "multiple": true,
                         "headValue" : "affiliationNumber",
                         "canRaiseClaim" : true,
                         "fields": {
-                            "includes": ["affiliation"]
+                            "includes": ["instituteAffiliation"]
+                        },
+                        "customDefinitions": {
+                            "instituteAffiliation": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "propertyData": {
+                                            "type": "json",
+                                            "properties": {
+                                                "affiliation": {
+                                                    "title": "Institute Affiliation",
+                                                    "$ref": "#/definitions/Affiliation"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         "propertyShowFirst" : [ "affiliationNumber", "medium", "grantYear", "expiryYear"]
                     }
@@ -67,14 +86,33 @@
                         "add": true,
                         "addform":"teacher-experience",
                         "editform":"teacher-experience",
-                        "claimEdit": true,
+                        "claimEdit": false,
                         "multiple": true,
                         "headValue" : "teacherType",
                         "canRaiseClaim" : true,
                         "fields": {
-                            "includes": ["experience"]
+                            "includes": ["teacherExperience"]
                         },
-                        "propertyShowFirst" : [ "employmentType", "instituteName"]
+                        "propertyShowFirst" : [ "employmentType", "instituteName"],
+                        "customDefinitions": {
+                            "teacherExperience": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "propertyData": {
+                                            "type": "json",
+                                            "properties": {
+                                                "experience": {
+                                                    "title": "PROFESSIONAL_EXPERIENCE",
+                                                    "$ref": "#/definitions/ExperienceType"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     {
                         "definition": "Teacher",
@@ -82,14 +120,33 @@
                         "add": true,
                         "addform":"teacher-education",
                         "editform":"teacher-education",
-                        "claimEdit": true,
+                        "claimEdit": false,
                         "multiple": true,
-                        "canRaiseClaim" : false,
+                        "canRaiseClaim" : true,
                         "headValue" : "qualification",
                         "fields": {
-                            "includes": ["academicQualifications"]
+                            "includes": ["teacherAcademicsQualification"]
                         },
-                        "propertyShowFirst" : [ "qualification", "instituteName", "graduationYear"]
+                        "propertyShowFirst" : [ "qualification", "instituteName", "graduationYear"],
+                        "customDefinitions": {
+                            "teacherAcademicsQualification": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "propertyData": {
+                                            "type": "json",
+                                            "properties": {
+                                                "academicQualifications": {
+                                                    "title": "EDUCATION",
+                                                    "$ref": "#/definitions/AcademicQualification"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 ]
             }
@@ -121,12 +178,35 @@
                         "addform":"student-education",
                         "editform":"student-education",
                         "edit": false,
-                        "claimEdit": true,
+                        "claimEdit": false,
                         "canRaiseClaim" : true,
                         "multiple": true,
                         "headValue" : "class",
                         "fields": {
-                            "includes": ["educationDetails"]
+                            "includes": ["studentInstituteAttest"]
+                        },
+                        "customDefinitions": {
+                            "studentInstituteAttest": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "propertyData": {
+                                            "type": "json",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "title": "Full Name"
+                                                },
+                                                "educationDetails": {
+                                                    "title": "EDUCATION",
+                                                    "$ref": "#/definitions/EducationType"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 ]

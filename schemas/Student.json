@@ -26,10 +26,8 @@
           "$ref": "Common.json/#/definitions/ContactDetails"
         },
         "educationDetails": {
-          "type": "array",
-          "items": {
-            "$ref": "Common.json/#/definitions/EducationType"
-          },
+          "type": "object",
+          "$ref": "Common.json/#/definitions/EducationType",
           "title": "Education Details"
         },
         "guardianDetails": {
@@ -85,7 +83,7 @@
           "educationDetails": "$.educationDetails"
         },
         "type": "MANUAL",
-        "conditions": "(ATTESTOR#$.experience.[*].instituteOSID#.contains(REQUESTER#$.educationDetails.*.instituteOSID#))",
+        "conditions": "(ATTESTOR#$.teacherExperience.[*]._osAttestedData#.contains(REQUESTER#$.educationDetails.instituteOSID#))",
         "attestorPlugin": "did:internal:ClaimPluginActor?entity=Teacher"
       },
       {
