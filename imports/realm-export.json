@@ -466,7 +466,8 @@
       "path": "/board-cbse",
       "attributes": {},
       "realmRoles": [
-        "board-cbse"
+        "board-cbse",
+        "default-roles-ndear"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -3000,7 +3001,7 @@
     "oauth2DevicePollingInterval": "600",
     "clientSessionIdleTimeout": "600",
     "clientSessionMaxLifespan": "600",
-    "frontendUrl": "",
+    "frontendUrl": "http://localhost:8080/auth",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5"
   },
